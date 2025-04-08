@@ -1,9 +1,12 @@
-package com.lluc.backend.shopapp.shopapp.services;
+package com.lluc.backend.shopapp.shopapp.services.Implementations;
 import com.lluc.backend.shopapp.shopapp.models.User;
 import com.lluc.backend.shopapp.shopapp.repositories.UsersRepository;
+import com.lluc.backend.shopapp.shopapp.services.interfaces.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +18,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private final UsersRepository usersRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     
     public UserServiceImpl(UsersRepository usersRepository) {
@@ -28,6 +34,13 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public User save(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return usersRepository.save(user);
+    }
+
+
+    @Transactional
+    public User save_2(User user) {
         try {
             if (user.getId() == null) {
                 user.setVersion(0);
@@ -53,7 +66,6 @@ public class UserServiceImpl implements UserService {
     public Optional<User> findById(Long id) {
         return usersRepository.findById(id);
     }
-
     @Transactional
     public void delete(Long id) {
         try {
