@@ -1,20 +1,24 @@
 package com.lluc.backend.shopapp.shopapp.auth.filters;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import static com.lluc.backend.shopapp.shopapp.auth.TokenJwtConfig.*;
 import com.lluc.backend.shopapp.shopapp.models.User;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -52,24 +56,37 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String username = ((org.springframework.security.core.userdetails.User) authResult.getPrincipal()).getUsername();
         
-       String token = Jwts.builder()
-        .setHeaderParam("typ", "JWT")
-        .setSubject(username)
-        .setIssuer("your-issuer")
-        .setAudience("your-audience")
-        .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) // 1 hora de expiración
-        .setIssuedAt(new Date())
-        .signWith(SECRET_KEY)
-        .compact();
+        Collection<? extends GrantedAuthority> authorities = authResult.getAuthorities();
         
-        response.addHeader(HEADER_AUTHORIZATION,PREFIX_TOKEN+ token);
+        boolean isAdmin = authorities.stream()
+            .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
+
+        // Serializar authorities como una lista de cadenas
+        Map<String, Object> claimsMap = new HashMap<>();
+        claimsMap.put(AUTHORITIES_KEY, authorities.stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.toList())); // Lista de roles como cadenas
+        claimsMap.put("isAdmin", isAdmin);
         
+        // Crear el token JWT
+        String token = Jwts.builder()
+            .setClaims(claimsMap) // Agregar los claims
+            .setSubject(username) // Usuario
+            .setIssuer("your-issuer") // Emisor
+            .setAudience("your-audience") // Audiencia
+            .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) // Tiempo de expiración
+            .setIssuedAt(new Date()) // Fecha de emisión
+            .signWith(SECRET_KEY) // Clave secreta
+            .compact();
         
+        // Agregar el token al encabezado de la respuesta
+        response.addHeader(HEADER_AUTHORIZATION, PREFIX_TOKEN + token);
+        
+        // Respuesta en el cuerpo
         Map<String, String> body = new HashMap<>();
         body.put("token", token);
         body.put("username", username);
         body.put("message", "Authentication successful");
-        
         
         response.getWriter().write(new ObjectMapper().writeValueAsString(body));
         response.setStatus(200);
@@ -80,14 +97,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException failed) throws IOException, ServletException {
 
-                Map<String, Object> body = new HashMap<>();
-                body.put("message", "Authentication failed");
-                body.put("error", failed.getMessage());
+        Map<String, Object> body = new HashMap<>();
+        body.put("message", "Authentication failed");
+        body.put("error", failed.getMessage());
 
-                response.getWriter().write(new ObjectMapper().writeValueAsString(body));
-                response.setStatus(401);
-                response.setContentType("application/json");
-        
+        response.getWriter().write(new ObjectMapper().writeValueAsString(body));
+        response.setStatus(401);
+        response.setContentType("application/json");
     }
-    
 }

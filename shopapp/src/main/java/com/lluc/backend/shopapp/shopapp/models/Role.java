@@ -12,12 +12,22 @@ import lombok.Setter;
 @Entity
 @Table(name = "roles")
 public class Role {
-    
+     
+
+    public Role() {
+    }
+
+    public Role(int i, String name) {
+        this.name = name;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)
     @Getter @Setter private String name;
+
+
 
 }

@@ -1,15 +1,17 @@
 package com.lluc.backend.shopapp.shopapp.services.Implementations;
+import com.lluc.backend.shopapp.shopapp.models.Role;
 import com.lluc.backend.shopapp.shopapp.models.User;
+import com.lluc.backend.shopapp.shopapp.repositories.RoleRepository;
 import com.lluc.backend.shopapp.shopapp.repositories.UsersRepository;
 import com.lluc.backend.shopapp.shopapp.services.interfaces.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,10 +22,14 @@ public class UserServiceImpl implements UserService {
     private final UsersRepository usersRepository;
 
     @Autowired
+    private final RoleRepository roleRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     
-    public UserServiceImpl(UsersRepository usersRepository) {
+    public UserServiceImpl(UsersRepository usersRepository, RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
         this.usersRepository = usersRepository;
     }
 
@@ -35,6 +41,14 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        Optional<Role> role = roleRepository.findByName("ROLE_USER");
+        
+        List<Role> roles = new ArrayList<>();
+        roles.add(role.orElseThrow(() -> new RuntimeException("Role not found")));
+
+        user.setRoles(roles);
+
         return usersRepository.save(user);
     }
 
