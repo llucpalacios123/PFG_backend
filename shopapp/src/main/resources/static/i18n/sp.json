@@ -1,0 +1,37 @@
+{
+    "Clothes": "Ropa",
+    "Food": "Comida",
+    "Crafts": "Artesanía",
+    "logoAlt": "Logo",
+    "searchPlaceholder": "Buscar en wallfri",
+    "userMenu": {
+        "userSection": "Sección de usuario",
+        "options": "Opciones",
+        "myProfile": "Mi perfil",
+        "editProfile": "Editar perfil",
+        "changePassword": "Cambiar contraseña",
+        "logout": "Cerrar sesión",
+        "ordersSection": "Sección de pedidos",
+        "orderHistory": "Historial de pedidos",
+        "trackOrders": "Seguimiento de pedidos",
+        "shoppingCart": "Carrito de compras",
+        "adminSection": "Sección de administrador",
+        "manageCompany": "Gestionar empresa",
+        "manageUsers": "Gestionar usuarios",
+        "menu": "Menu",
+        "company": "Empresa",
+        "user": "Usuario",
+        "orders": "Pedidos"
+    },
+    "errors": {
+        "noUserId": "No se encontró el identificador de usuario.",
+        "noLoginKey": "No se encontró la clave de sesión.",
+        "title": "Error",
+        "userNotFound": "Usuario no encontrado",
+        "loadUsers": "No se pudieron cargar los usuarios",
+        "usernameExists": "El nombre de usuario ya existe",
+        "emailExists": "El correo ya existe",
+        "unexpected": "Ocurrió un error inesperado",
+        "serverConnection": "No se pudo conectar con el servidor"
+    }
+}

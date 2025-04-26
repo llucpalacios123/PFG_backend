@@ -15,10 +15,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import static com.lluc.backend.shopapp.shopapp.auth.TokenJwtConfig.*;
-import com.lluc.backend.shopapp.shopapp.models.User;
+import com.lluc.backend.shopapp.shopapp.auth.CustomUserDetails;
+import com.lluc.backend.shopapp.shopapp.models.entities.User;
 
-import io.jsonwebtoken.Claims;
+import static com.lluc.backend.shopapp.shopapp.auth.TokenJwtConfig.*;
+
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -33,61 +34,64 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.authenticationManager = authenticationManager;
     }
 
+
     @Override
-    public Authentication attemptAuthentication(final HttpServletRequest request, final HttpServletResponse response) throws AuthenticationException {
-        
-        User user = new User();
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-
-        user.setUsername(username);
-        user.setPassword(password);
-
-        logger.info("Username: " + username + ", Password: " + password);
-
-        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
-
-        return authenticationManager.authenticate(authRequest);
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+        try {
+            User user = new ObjectMapper().readValue(request.getInputStream(), User.class);
+            String username = user.getUsername();
+            String password = user.getPassword();
+    
+            logger.info("Username: " + username + ", Password: " + password);
+    
+            UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
+            return authenticationManager.authenticate(authRequest);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to parse authentication request body", e);
+        }
     }
+    
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
-        Authentication authResult) throws IOException, ServletException {
+            Authentication authResult) throws IOException, ServletException {
 
-        String username = ((org.springframework.security.core.userdetails.User) authResult.getPrincipal()).getUsername();
-        
-        Collection<? extends GrantedAuthority> authorities = authResult.getAuthorities();
-        
-        boolean isAdmin = authorities.stream()
+        // Obtener el principal y hacer un cast a CustomUserDetails
+        CustomUserDetails principal = (CustomUserDetails) authResult.getPrincipal();
+        Long userId = principal.getId(); // Ahora puedes obtener el ID del usuario
+
+        // Obtener el username y los roles
+        String username = principal.getUsername();
+        Collection<? extends GrantedAuthority> authorities = principal.getAuthorities();
+		
+		boolean isAdmin = authorities.stream()
             .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
-
-        // Serializar authorities como una lista de cadenas
+		
+        // Crear el mapa de claims
         Map<String, Object> claimsMap = new HashMap<>();
-        claimsMap.put(AUTHORITIES_KEY, authorities.stream()
+        claimsMap.put("userId", userId); // Añadir el ID del usuario
+        claimsMap.put("username", username);
+		claimsMap.put("isAdmin", isAdmin);
+        claimsMap.put("roles", authorities.stream()
             .map(GrantedAuthority::getAuthority)
-            .collect(Collectors.toList())); // Lista de roles como cadenas
-        claimsMap.put("isAdmin", isAdmin);
-        
+            .collect(Collectors.toList()));
+		
+		
         // Crear el token JWT
         String token = Jwts.builder()
-            .setClaims(claimsMap) // Agregar los claims
-            .setSubject(username) // Usuario
-            .setIssuer("your-issuer") // Emisor
-            .setAudience("your-audience") // Audiencia
-            .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) // Tiempo de expiración
-            .setIssuedAt(new Date()) // Fecha de emisión
-            .signWith(SECRET_KEY) // Clave secreta
+            .setClaims(claimsMap)
+            .setSubject(username)
+            .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+            .signWith(SECRET_KEY)
             .compact();
-        
+
         // Agregar el token al encabezado de la respuesta
         response.addHeader(HEADER_AUTHORIZATION, PREFIX_TOKEN + token);
-        
+
         // Respuesta en el cuerpo
         Map<String, String> body = new HashMap<>();
         body.put("token", token);
         body.put("username", username);
-        body.put("message", "Authentication successful");
-        
         response.getWriter().write(new ObjectMapper().writeValueAsString(body));
         response.setStatus(200);
         response.setContentType("application/json");

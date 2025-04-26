@@ -1,9 +1,10 @@
-package com.lluc.backend.shopapp.shopapp.models;
+package com.lluc.backend.shopapp.shopapp.models.entities;
 
 import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -64,7 +65,7 @@ public class User {
     @OneToOne(mappedBy = "administrator")
     @Getter @Setter private Company companyAdmin;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", 
     joinColumns = @JoinColumn(name = "user_id"), 
     inverseJoinColumns = @JoinColumn(name = "role_id"),

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.lluc.backend.shopapp.shopapp.models.Product;
+import com.lluc.backend.shopapp.shopapp.models.entities.Product;
 
 @Service
 public interface ProductService {

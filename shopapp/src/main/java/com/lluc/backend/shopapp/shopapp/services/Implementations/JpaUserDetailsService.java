@@ -13,7 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.lluc.backend.shopapp.shopapp.models.User;
+import com.lluc.backend.shopapp.shopapp.auth.CustomUserDetails;
+import com.lluc.backend.shopapp.shopapp.models.entities.User;
 import com.lluc.backend.shopapp.shopapp.repositories.UsersRepository;
 
 @Service
@@ -24,7 +25,7 @@ public class JpaUserDetailsService implements UserDetailsService {
     private UsersRepository usersRepository;
     
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         
         Optional<User> userFinded = usersRepository.findByUsername(username);
 
@@ -37,10 +38,11 @@ public class JpaUserDetailsService implements UserDetailsService {
         .stream()
         .map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
 
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), 
+        return new CustomUserDetails(user.getId(),
+                         user.getUsername(), 
                         user.getPassword(), 
                         true,
-                        true,
+                        false,
                         true,
                         true,
                         authorities);   

@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.lluc.backend.shopapp.shopapp.models.User;
+import com.lluc.backend.shopapp.shopapp.models.entities.User;
 
 public interface UsersRepository extends CrudRepository<User, Long> {
     List<User> findAll();

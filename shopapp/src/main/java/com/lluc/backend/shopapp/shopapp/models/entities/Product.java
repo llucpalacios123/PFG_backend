@@ -1,4 +1,4 @@
-package com.lluc.backend.shopapp.shopapp.models;
+package com.lluc.backend.shopapp.shopapp.models.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

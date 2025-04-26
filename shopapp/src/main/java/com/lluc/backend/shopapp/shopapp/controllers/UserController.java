@@ -19,21 +19,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lluc.backend.shopapp.shopapp.models.User;
+import com.lluc.backend.shopapp.shopapp.models.dto.UserDTO;
+import com.lluc.backend.shopapp.shopapp.models.entities.User;
 import com.lluc.backend.shopapp.shopapp.services.interfaces.UserService;
 
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(originPatterns = "*")
 public class UserController {
     
     @Autowired
     private UserService userService;   
 
     @GetMapping
-    public List<User> listUsers() {
+    public List<UserDTO> listUsers() {
         return userService.findAll();
     }
 
@@ -59,7 +60,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id) {
         
-        Optional<User> user = userService.findById(id);
+        Optional<UserDTO> user = userService.findById(id);
         
         if (user.isPresent()) {
             return ResponseEntity.ok(user.orElseThrow());
@@ -73,16 +74,10 @@ public class UserController {
     }
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@Valid @RequestBody User user, BindingResult result) {
-        Optional<User> existingUser = userService.findById(user.getId());
+        Optional<UserDTO> existingUser = userService.findById(user.getId());
         
         if (existingUser.isPresent()) {
-            User updatedUser = existingUser.get();
-            updatedUser.setFirstName(user.getFirstName());
-            updatedUser.setEmail(user.getEmail());
-            // Actualizar otros campos según sea necesario
-            
-            User savedUser = userService.save(updatedUser);
-            return ResponseEntity.ok(savedUser);
+           
         }
         
         return ResponseEntity.notFound().build();

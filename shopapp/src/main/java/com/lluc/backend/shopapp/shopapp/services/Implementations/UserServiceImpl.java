@@ -1,6 +1,8 @@
 package com.lluc.backend.shopapp.shopapp.services.Implementations;
-import com.lluc.backend.shopapp.shopapp.models.Role;
-import com.lluc.backend.shopapp.shopapp.models.User;
+import com.lluc.backend.shopapp.shopapp.models.dto.UserDTO;
+import com.lluc.backend.shopapp.shopapp.models.dto.mapper.DTOMapperUser;
+import com.lluc.backend.shopapp.shopapp.models.entities.Role;
+import com.lluc.backend.shopapp.shopapp.models.entities.User;
 import com.lluc.backend.shopapp.shopapp.repositories.RoleRepository;
 import com.lluc.backend.shopapp.shopapp.repositories.UsersRepository;
 import com.lluc.backend.shopapp.shopapp.services.interfaces.UserService;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -34,12 +37,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional(readOnly = true)
-    public List<User> findAll() {
-        return usersRepository.findAll();
+    public List<UserDTO> findAll() {
+
+        List<User> users = usersRepository.findAll();
+
+        // Convertir todos los usuarios a UserDTO usando streams
+        List<UserDTO> usersDTO = users.stream()
+                                    .map(DTOMapperUser::toDTO) // Access the static method directly
+                                    .collect(Collectors.toList());
+
+        return usersDTO;
     }
 
     @Transactional
-    public User save(User user) {
+    public UserDTO save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         Optional<Role> role = roleRepository.findByName("ROLE_USER");
@@ -48,8 +59,8 @@ public class UserServiceImpl implements UserService {
         roles.add(role.orElseThrow(() -> new RuntimeException("Role not found")));
 
         user.setRoles(roles);
-
-        return usersRepository.save(user);
+        
+        return DTOMapperUser.toDTO(usersRepository.save(user));
     }
 
 
@@ -77,8 +88,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> findById(Long id) {
-        return usersRepository.findById(id);
+    public Optional<UserDTO> findById(Long id) {
+        Optional<User> user = usersRepository.findById(id);
+        if(user.isEmpty()){
+            throw new RuntimeException("User not found with id: " + id);
+        }
+        
+        return Optional.of(DTOMapperUser.toDTO(user.get()));
     }
     @Transactional
     public void delete(Long id) {

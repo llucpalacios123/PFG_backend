@@ -1,0 +1,37 @@
+{
+  "Clothes": "Roba",
+  "Food": "Aliment",
+  "Crafts": "Artesania",
+  "logoAlt": "Logo",
+  "searchPlaceholder": "Cerca a wallfri",
+  "userMenu": {
+    "userSection": "Secció d'usuari",
+    "options": "Opcions",
+    "myProfile": "El meu perfil",
+    "editProfile": "Editar perfil",
+    "changePassword": "Canviar contrasenya",
+    "logout": "Tancar sessió",
+    "ordersSection": "Secció de comandes",
+    "orderHistory": "Historial de comandes",
+    "trackOrders": "Seguiment de comandes",
+    "shoppingCart": "Carret de la compra",
+    "adminSection": "Secció d'administrador",
+    "manageCompany": "Gestionar empresa",
+    "manageUsers": "Gestionar usuaris",
+    "menu": "Menú",
+    "company": "Empresa",
+    "user": "Usuari",
+    "orders": "Comandes"
+  },
+  "errors": {
+    "noUserId": "No s'ha trobat l'identificador d'usuari.",
+    "noLoginKey": "No s'ha trobat la clau de sessió.",
+    "title": "Error",
+    "userNotFound": "Usuari no trobat",
+    "loadUsers": "No s'han pogut carregar els usuaris",
+    "usernameExists": "El nom d'usuari ja existeix",
+    "emailExists": "El correu electrònic ja existeix",
+    "unexpected": "S'ha produït un error inesperat",
+    "serverConnection": "No s'ha pogut connectar amb el servidor"
+  }
+}

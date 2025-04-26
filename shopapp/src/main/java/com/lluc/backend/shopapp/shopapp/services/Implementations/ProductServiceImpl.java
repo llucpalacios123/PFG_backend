@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.lluc.backend.shopapp.shopapp.models.Product;
+import com.lluc.backend.shopapp.shopapp.models.entities.Product;
 import com.lluc.backend.shopapp.shopapp.repositories.ProductRepository;
 import com.lluc.backend.shopapp.shopapp.services.interfaces.ProductService;
 

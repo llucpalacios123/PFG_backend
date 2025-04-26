@@ -10,5 +10,6 @@ public class TokenJwtConfig {
     public final static String HEADER_AUTHORIZATION = "Authorization";
     public final static String TOKEN_DELIMITER = ":";
     public final static Long EXPIRATION_TIME =  3600000l;
-    public final static String AUTHORITIES_KEY = "authorities";
+    public final static String AUTHORITIES_KEY = "roles";
+    public final static String ROUTE_PRINCIPAL = "http://localhost:5173";
 }

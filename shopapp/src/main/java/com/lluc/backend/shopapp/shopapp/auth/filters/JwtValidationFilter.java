@@ -1,9 +1,6 @@
 package com.lluc.backend.shopapp.shopapp.auth.filters;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +14,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lluc.backend.shopapp.shopapp.auth.SimpleGrantedAuthorityJsonConstructor;
-
-import aj.org.objectweb.asm.TypeReference;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -56,13 +50,11 @@ public class JwtValidationFilter extends BasicAuthenticationFilter{
                 .getBody();
 
             String username = claims.getSubject();
-            Object authoritiesClaims = claims.get(AUTHORITIES_KEY);
             
-
-            List<GrantedAuthority> authorities = Arrays.asList(
-                new ObjectMapper()
-                .addMixIn(SimpleGrantedAuthority.class, SimpleGrantedAuthorityJsonConstructor.class)
-                .readValue(authoritiesClaims.toString().getBytes(), SimpleGrantedAuthority[].class));
+            List<String> roles = (List<String>) claims.get(AUTHORITIES_KEY);
+            List<GrantedAuthority> authorities = roles.stream()
+            .map(role -> new SimpleGrantedAuthority(role))
+            .collect(Collectors.toList());
 
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(auth);
@@ -77,6 +69,12 @@ public class JwtValidationFilter extends BasicAuthenticationFilter{
             response.setContentType("application/json");
         }
 
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getRequestURI();
+        return path.startsWith("/i18n/");
     }
     
 }
