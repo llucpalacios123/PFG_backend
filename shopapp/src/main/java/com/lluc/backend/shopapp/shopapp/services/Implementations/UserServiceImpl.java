@@ -1,4 +1,6 @@
 package com.lluc.backend.shopapp.shopapp.services.Implementations;
+
+import com.lluc.backend.shopapp.shopapp.auth.JwtTokenProvider;
 import com.lluc.backend.shopapp.shopapp.models.dto.UserDTO;
 import com.lluc.backend.shopapp.shopapp.models.dto.mapper.DTOMapperUser;
 import com.lluc.backend.shopapp.shopapp.models.entities.Role;
@@ -9,6 +11,8 @@ import com.lluc.backend.shopapp.shopapp.services.interfaces.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,15 +26,17 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private final UsersRepository usersRepository;
+    private UsersRepository usersRepository;
 
     @Autowired
-    private final RoleRepository roleRepository;
+    private RoleRepository roleRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
     public UserServiceImpl(UsersRepository usersRepository, RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
         this.usersRepository = usersRepository;
@@ -38,71 +44,110 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     public List<UserDTO> findAll() {
-
         List<User> users = usersRepository.findAll();
 
-        // Convertir todos los usuarios a UserDTO usando streams
-        List<UserDTO> usersDTO = users.stream()
-                                    .map(DTOMapperUser::toDTO) // Access the static method directly
-                                    .collect(Collectors.toList());
-
-        return usersDTO;
+        // Convert all users to UserDTO using streams
+        return users.stream()
+                .map(DTOMapperUser::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Transactional
     public UserDTO save(User user) {
+        if (user.getId() == null) {
+            // Create a new user
+            return createUser(user);
+        } else {
+            // Update an existing user
+            return updateUser(user);
+        }
+    }
+
+    private UserDTO createUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         Optional<Role> role = roleRepository.findByName("ROLE_USER");
-        
+
         List<Role> roles = new ArrayList<>();
         roles.add(role.orElseThrow(() -> new RuntimeException("Role not found")));
 
         user.setRoles(roles);
-        
+
         return DTOMapperUser.toDTO(usersRepository.save(user));
     }
 
+    private UserDTO updateUser(User user) {
+        User existingUser = usersRepository.findById(user.getId())
+                .orElseThrow(() -> new RuntimeException("UserNotFound: " + user.getId()));
 
-    @Transactional
-    public User save_2(User user) {
-        try {
-            if (user.getId() == null) {
-                user.setVersion(0);
-                return usersRepository.save(user); // Inicializa la versión para nuevas entidades
-            } else {
-                Optional<User> existingUser = usersRepository.findById(user.getId());
-                if (existingUser.isPresent()) {
-                    User updatedUser = existingUser.get();
-                    updatedUser.setUsername(user.getUsername());
-                    updatedUser.setEmail(user.getEmail());
-                    return usersRepository.save(updatedUser);
-                } else {
-                    throw new RuntimeException("User not found with id: " + user.getId());
-                }
-            }
-        } catch (OptimisticLockingFailureException e) {
-            // Manejo de la excepción de bloqueo optimista
-            throw new RuntimeException("Error de bloqueo optimista al guardar el usuario", e);
+        boolean usernameChanged = false;
+
+        if (user.getUsername() != null && !user.getUsername().equals(existingUser.getUsername())) {
+            existingUser.setUsername(user.getUsername());
+            usernameChanged = true; // Mark that the username has changed
         }
+        if (user.getFirstName() != null) {
+            existingUser.setFirstName(user.getFirstName());
+        }
+        if (user.getLastName() != null) {
+            existingUser.setLastName(user.getLastName());
+        }
+        if (user.getEmail() != null) {
+            existingUser.setEmail(user.getEmail());
+        }
+        if (user.getPassword() != null) {
+            existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
+        User updatedUser = usersRepository.save(existingUser);
+
+        String newToken = null;
+
+        if (usernameChanged) {
+            
+            newToken = null;
+            List<GrantedAuthority> authorities = updatedUser.getRoles()
+            .stream()
+            .map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
+
+            newToken = jwtTokenProvider.generateToken(updatedUser.getId(), updatedUser.getUsername(), authorities);
+        }
+
+        // Convert the updated user to DTO
+        UserDTO userDTO = DTOMapperUser.toDTO(updatedUser);
+
+        if (newToken != null) {
+            userDTO.setToken(newToken);
+        }
+
+        return userDTO;
     }
 
     @Transactional(readOnly = true)
     public Optional<UserDTO> findById(Long id) {
         Optional<User> user = usersRepository.findById(id);
-        if(user.isEmpty()){
+        if (user.isEmpty()) {
             throw new RuntimeException("User not found with id: " + id);
         }
-        
+
         return Optional.of(DTOMapperUser.toDTO(user.get()));
     }
+
     @Transactional
     public void delete(Long id) {
         try {
             usersRepository.deleteById(id);
         } catch (OptimisticLockingFailureException e) {
-            // Manejo de la excepción de bloqueo optimista
-            throw new RuntimeException("Error de bloqueo optimista al eliminar el usuario", e);
+            // Handle optimistic locking exception
+            throw new RuntimeException("Optimistic locking error while deleting the user", e);
         }
+    }
+
+    @Override
+    public Optional<UserDTO> findByUsername(String username) {
+        User user = usersRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+
+        return Optional.of(DTOMapperUser.toDTO(user));
     }
 }

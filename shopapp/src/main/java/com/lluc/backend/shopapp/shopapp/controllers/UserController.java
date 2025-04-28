@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lluc.backend.shopapp.shopapp.models.dto.UpdateUserDTO;
 import com.lluc.backend.shopapp.shopapp.models.dto.UserDTO;
+import com.lluc.backend.shopapp.shopapp.models.dto.mapper.DTOMapperUpdateUser;
 import com.lluc.backend.shopapp.shopapp.models.entities.User;
 import com.lluc.backend.shopapp.shopapp.services.interfaces.UserService;
 
@@ -55,6 +58,28 @@ public class UserController {
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UpdateUserDTO user, BindingResult result) {
+        if(result.hasErrors()) {
+            return validationErrors(result);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(DTOMapperUpdateUser.toEntity(user)));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getAuthenticatedUser() {
+        // Obtén el nombre de usuario del usuario autenticado
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        // Busca al usuario en la base de datos por su nombre de usuario
+        Optional<UserDTO> user = userService.findByUsername(username);
+
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+    }
                 
                 
     @GetMapping("/{id}")
@@ -72,14 +97,5 @@ public class UserController {
     public void deleteUser(@PathVariable Long id) {
         userService.delete(id);
     }
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@Valid @RequestBody User user, BindingResult result) {
-        Optional<UserDTO> existingUser = userService.findById(user.getId());
-        
-        if (existingUser.isPresent()) {
-           
-        }
-        
-        return ResponseEntity.notFound().build();
-    }
+
 }

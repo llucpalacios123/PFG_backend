@@ -1,4 +1,10 @@
 {
+    "editProfile":"Edit profile",
+    "username": "Username",
+    "email": "Email",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "saveChanges": "Save Changes",    
     "Clothes": "Clothes",
     "Food": "Food",
     "Crafts": "Crafts",
@@ -21,7 +27,8 @@
       "menu": "Menu",
       "company": "Company",
       "user": "User",
-      "orders": "Orders"
+      "orders": "Orders",
+        "login": "Login"
   },
   "errors": {
       "noUserId": "User ID not found.",

@@ -14,47 +14,44 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lluc.backend.shopapp.shopapp.auth.JwtTokenProvider;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-
-import static com.lluc.backend.shopapp.shopapp.auth.TokenJwtConfig.*;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class JwtValidationFilter extends BasicAuthenticationFilter{
+public class JwtValidationFilter extends BasicAuthenticationFilter {
 
-    public JwtValidationFilter(AuthenticationManager authenticationManager) {
+    private final JwtTokenProvider jwtTokenProvider;
+
+    public JwtValidationFilter(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
         super(authenticationManager);
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        String authHeader = request.getHeader(HEADER_AUTHORIZATION );
-        if (authHeader == null || !authHeader.startsWith(PREFIX_TOKEN)) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             chain.doFilter(request, response);
             return;
         }
-        String token = authHeader.replace(PREFIX_TOKEN, "");
-        
-        try {
+        String token = authHeader.replace("Bearer ", "");
 
-            Claims claims = Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            // Validar el token usando JwtTokenProvider
+            Claims claims = jwtTokenProvider.validateToken(token);
 
             String username = claims.getSubject();
-            
-            List<String> roles = (List<String>) claims.get(AUTHORITIES_KEY);
+            List<String> roles = (List<String>) claims.get("roles");
             List<GrantedAuthority> authorities = roles.stream()
-            .map(role -> new SimpleGrantedAuthority(role))
-            .collect(Collectors.toList());
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
 
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(auth);
@@ -68,7 +65,6 @@ public class JwtValidationFilter extends BasicAuthenticationFilter{
             response.getWriter().write(new ObjectMapper().writeValueAsString(body));
             response.setContentType("application/json");
         }
-
     }
 
     @Override
@@ -76,5 +72,4 @@ public class JwtValidationFilter extends BasicAuthenticationFilter{
         String path = request.getRequestURI();
         return path.startsWith("/i18n/");
     }
-    
 }

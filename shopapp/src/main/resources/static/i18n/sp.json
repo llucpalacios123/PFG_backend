@@ -1,4 +1,10 @@
 {
+    "editProfile":"Editar perfil",
+    "username": "Nombre de usuario",
+    "email": "Correo electrónico",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "saveChanges": "Guardar cambios",
     "Clothes": "Ropa",
     "Food": "Comida",
     "Crafts": "Artesanía",
@@ -18,10 +24,11 @@
         "adminSection": "Sección de administrador",
         "manageCompany": "Gestionar empresa",
         "manageUsers": "Gestionar usuarios",
-        "menu": "Menu",
+        "menu": "Menú",
         "company": "Empresa",
         "user": "Usuario",
-        "orders": "Pedidos"
+        "orders": "Pedidos",
+        "login": "Iniciar sesión"
     },
     "errors": {
         "noUserId": "No se encontró el identificador de usuario.",

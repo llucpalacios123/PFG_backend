@@ -1,0 +1,48 @@
+package com.lluc.backend.shopapp.shopapp.auth;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Component;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
+import static com.lluc.backend.shopapp.shopapp.auth.TokenJwtConfig.*;
+
+@Component
+public class JwtTokenProvider {
+
+    public String generateToken(Long userId, String username, List<? extends GrantedAuthority> authorities) {
+        // Crear el mapa de claims
+        Map<String, Object> claims = Map.of(
+            "userId", userId,
+            "username", username,
+            "roles", authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList()),
+            "isAdmin", authorities.stream()
+                .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"))
+        );
+
+        // Crear el token JWT
+        return Jwts.builder()
+            .setClaims(claims)
+            .setSubject(username)
+            .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+            .signWith(SECRET_KEY, SignatureAlgorithm.HS512)
+            .compact();
+    }
+
+    public Claims validateToken(String token) {
+        return Jwts.parser()
+            .setSigningKey(SECRET_KEY)
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
+    }
+}
