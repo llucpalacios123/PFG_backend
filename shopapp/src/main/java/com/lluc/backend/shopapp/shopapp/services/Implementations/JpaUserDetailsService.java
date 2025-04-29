@@ -45,7 +45,9 @@ public class JpaUserDetailsService implements UserDetailsService {
                         false,
                         true,
                         true,
-                        authorities);   
+                        authorities,
+                        user.getEmpresa() != null
+                        );   
     }
     
 }

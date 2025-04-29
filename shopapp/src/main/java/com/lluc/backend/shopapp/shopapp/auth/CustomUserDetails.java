@@ -15,12 +15,14 @@ public class CustomUserDetails implements UserDetails {
     private boolean accountExpired;
     private boolean credentianlsNonExpired;
     private boolean accountNonLocked;
+    private boolean hasCompany; 
 
     // Constructor
     public CustomUserDetails(Long id, String username, String password, 
                                 boolean enabled, boolean accountExpired, 
-                              boolean credentianlsNonExpired, boolean accountNonLocked,
-                              Collection<? extends GrantedAuthority> authorities
+                                boolean credentianlsNonExpired, boolean accountNonLocked,
+                                Collection<? extends GrantedAuthority> authorities,
+                                boolean hasCompany 
                               ) {
         this.id = id;
         this.username = username;
@@ -30,6 +32,7 @@ public class CustomUserDetails implements UserDetails {
         this.accountExpired = accountExpired;
         this.credentianlsNonExpired = credentianlsNonExpired;
         this.accountNonLocked = accountNonLocked;
+        this.hasCompany = hasCompany; // Asignar el valor
     }
 
     // Getters and Setters
@@ -102,5 +105,13 @@ public class CustomUserDetails implements UserDetails {
 
     public void setAccountNonLocked(boolean accountNonLocked) {
         this.accountNonLocked = accountNonLocked;
+    }
+
+    public boolean isHasCompany() { // Getter para hasCompany
+        return hasCompany;
+    }
+
+    public void setHasCompany(boolean hasCompany) { // Setter para hasCompany
+        this.hasCompany = hasCompany;
     }
 }

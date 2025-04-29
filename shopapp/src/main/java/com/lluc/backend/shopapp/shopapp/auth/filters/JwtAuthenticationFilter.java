@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -16,11 +17,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lluc.backend.shopapp.shopapp.auth.CustomUserDetails;
+import com.lluc.backend.shopapp.shopapp.auth.JwtTokenProvider;
 import com.lluc.backend.shopapp.shopapp.models.entities.User;
 
 import static com.lluc.backend.shopapp.shopapp.auth.TokenJwtConfig.*;
 
-import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,11 +30,12 @@ import jakarta.servlet.http.HttpServletResponse;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationManager authenticationManager;
+    private JwtTokenProvider jwtTokenProvider; // Eliminar @Autowired
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
         this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider; // Inicializar en el constructor
     }
-
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -55,39 +57,23 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
             Authentication authResult) throws IOException, ServletException {
-
+    
         // Obtener el principal y hacer un cast a CustomUserDetails
         CustomUserDetails principal = (CustomUserDetails) authResult.getPrincipal();
         Long userId = principal.getId(); // Ahora puedes obtener el ID del usuario
-
+    
         // Obtener el username y los roles
         String username = principal.getUsername();
-        Collection<? extends GrantedAuthority> authorities = principal.getAuthorities();
-		
-		boolean isAdmin = authorities.stream()
-            .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
-		
-        // Crear el mapa de claims
-        Map<String, Object> claimsMap = new HashMap<>();
-        claimsMap.put("userId", userId); // Añadir el ID del usuario
-        claimsMap.put("username", username);
-		claimsMap.put("isAdmin", isAdmin);
-        claimsMap.put("roles", authorities.stream()
-            .map(GrantedAuthority::getAuthority)
-            .collect(Collectors.toList()));
-		
-		
-        // Crear el token JWT
-        String token = Jwts.builder()
-            .setClaims(claimsMap)
-            .setSubject(username)
-            .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-            .signWith(SECRET_KEY)
-            .compact();
-
+        List<? extends GrantedAuthority> authorities = principal.getAuthorities()
+            .stream()
+            .collect(Collectors.toList()); // Convert Collection to List
+        
+    
+        String token = jwtTokenProvider.generateToken(userId, username, authorities, false);
+    
         // Agregar el token al encabezado de la respuesta
         response.addHeader(HEADER_AUTHORIZATION, PREFIX_TOKEN + token);
-
+    
         // Respuesta en el cuerpo
         Map<String, String> body = new HashMap<>();
         body.put("token", token);

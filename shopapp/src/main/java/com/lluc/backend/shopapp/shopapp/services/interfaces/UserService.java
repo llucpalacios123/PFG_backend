@@ -21,4 +21,6 @@ public interface UserService {
     void delete(Long id);
 
     Optional<UserDTO> findByUsername(String username);
+
+    void changePassword(String username, String oldPassword, String newPassword);
 }

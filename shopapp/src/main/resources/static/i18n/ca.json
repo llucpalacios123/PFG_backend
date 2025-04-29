@@ -40,5 +40,26 @@
     "emailExists": "El correu electrònic ja existeix",
     "unexpected": "S'ha produït un error inesperat",
     "serverConnection": "No s'ha pogut connectar amb el servidor"
+  },
+
+  "changePassword": {
+    "title": "Canviar Contrasenya",
+    "labels": {
+      "oldPassword": "Contrasenya Antiga",
+      "newPassword": "Nova Contrasenya",
+      "confirmPassword": "Confirma la Nova Contrasenya"
+    },
+    "buttons": {
+      "submit": "Canviar Contrasenya"
+    },
+    "errors": {
+      "passwordMismatch": "La nova contrasenya i la confirmació no coincideixen.",
+      "changeFailed": "No s'ha pogut canviar la contrasenya.",
+      "generic": "S'ha produït un error en canviar la contrasenya.",
+      "incorrectOldPassword": "La contrasenya antiga és incorrecta."
+    },
+    "success": {
+      "passwordChanged": "Contrasenya canviada correctament!"
+    }
   }
 }

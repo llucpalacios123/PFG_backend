@@ -40,6 +40,27 @@
       "emailExists": "The email already exists",
       "unexpected": "An unexpected error occurred",
       "serverConnection": "Failed to connect to the server"
+  },
+
+  "changePassword": {
+    "title": "Change Password",
+    "labels": {
+      "oldPassword": "Old Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm New Password"
+    },
+    "buttons": {
+      "submit": "Change Password"
+    },
+    "errors": {
+      "passwordMismatch": "New password and confirm password do not match.",
+      "changeFailed": "Failed to change password.",
+      "generic": "An error occurred while changing the password.",
+      "incorrectOldPassword": "Old password is incorrect."
+    },
+    "success": {
+      "passwordChanged": "Password changed successfully!"
+    }
   }
   }
 

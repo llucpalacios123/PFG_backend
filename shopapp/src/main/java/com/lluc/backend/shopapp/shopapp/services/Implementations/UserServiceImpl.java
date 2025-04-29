@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService {
             .stream()
             .map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
 
-            newToken = jwtTokenProvider.generateToken(updatedUser.getId(), updatedUser.getUsername(), authorities);
+            newToken = jwtTokenProvider.generateToken(updatedUser.getId(), updatedUser.getUsername(), authorities, user.getEmpresa() != null);
         }
 
         // Convert the updated user to DTO
@@ -149,5 +149,25 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
 
         return Optional.of(DTOMapperUser.toDTO(user));
+    }
+
+    @Override
+    public void changePassword(String username, String oldPassword, String newPassword) {
+        // Find the user by username
+        Optional<User> userOptional = usersRepository.findByUsername(username);
+    
+        if (userOptional.isEmpty()) {
+            throw new RuntimeException("Usuario no encontrado");
+        }
+    
+        User user = userOptional.get();
+        
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new RuntimeException("La contraseña antigua es incorrecta");
+        }
+    
+        // Update the password
+        user.setPassword(passwordEncoder.encode(newPassword));
+        usersRepository.save(user);
     }
 }

@@ -17,7 +17,7 @@ import static com.lluc.backend.shopapp.shopapp.auth.TokenJwtConfig.*;
 @Component
 public class JwtTokenProvider {
 
-    public String generateToken(Long userId, String username, List<? extends GrantedAuthority> authorities) {
+    public String generateToken(Long userId, String username, List<? extends GrantedAuthority> authorities, boolean hasCompany) {
         // Crear el mapa de claims
         Map<String, Object> claims = Map.of(
             "userId", userId,
@@ -26,7 +26,8 @@ public class JwtTokenProvider {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList()),
             "isAdmin", authorities.stream()
-                .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"))
+                .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN")),
+            "hasCompany", hasCompany // Agregar si el usuario tiene empresa asociada
         );
 
         // Crear el token JWT

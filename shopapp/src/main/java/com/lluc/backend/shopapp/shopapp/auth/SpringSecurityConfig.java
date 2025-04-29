@@ -57,12 +57,13 @@ public class SpringSecurityConfig{
                 .requestMatchers(HttpMethod.GET,"/i18n/**").permitAll() 
                 .requestMatchers(HttpMethod.POST,"/users").permitAll()
                 .requestMatchers(HttpMethod.GET,"/users").hasAnyRole("ADMIN")
-                .requestMatchers(HttpMethod.PUT,"/update").hasAnyRole("USER", "ADMIN")
+                .requestMatchers(HttpMethod.PUT,"/users/changepswd").hasAnyRole("USER", "ADMIN")
+                .requestMatchers(HttpMethod.PUT,"/users/update").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated() // Requerir autenticación para cualquier otra solicitud
             )
             .csrf(config -> config.disable())// Desactivar CSRF para simplificar (no recomendado en producción)
             .sessionManagement(managment -> managment.sessionCreationPolicy(SessionCreationPolicy.STATELESS))// Usar sesiones sin estado
-            .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager())) // Añadir el filtro de autenticación JWT
+            .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager(), jwtTokenProvider)) // Añadir el filtro de autenticación JWT
             .addFilter(new JwtValidationFilter(authenticationConfiguration.getAuthenticationManager(), jwtTokenProvider)) // Añadir el filtro de validación JWT
             .cors(cors-> cors.configurationSource(corsConfigurationSource())); // Configurar CORS
         return http.build();

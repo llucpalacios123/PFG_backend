@@ -98,4 +98,18 @@ public class UserController {
         userService.delete(id);
     }
 
+    @PostMapping("/changepswd")
+    public ResponseEntity<?> changePassword(@RequestBody Map<String, String> passwords) {
+        String oldPassword = passwords.get("oldPassword");
+        String newPassword = passwords.get("newPassword");
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        try {
+            userService.changePassword(username, oldPassword, newPassword);
+            return ResponseEntity.ok("succes.changePassword");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
 }
