@@ -4,8 +4,6 @@ import org.springframework.stereotype.Service;
 import com.lluc.backend.shopapp.shopapp.models.dto.UserDTO;
 import com.lluc.backend.shopapp.shopapp.models.entities.User;
 
-import jakarta.validation.Valid;
-
 import java.util.List;
 import java.util.Optional;
 

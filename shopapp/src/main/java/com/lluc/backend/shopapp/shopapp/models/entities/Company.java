@@ -10,6 +10,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,6 +28,7 @@ public class Company {
 
     @Getter
     @Setter
+    @NotNull
     private String name;
 
     @Getter
@@ -33,12 +37,30 @@ public class Company {
 
     @Getter
     @Setter
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    private String address;
+
+    @Getter
+    @Setter
+    private String phoneNumber;
+    
+    @Getter
+    @Setter
+    @Email
+    @NotNull
+    private String email;
+
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
 
     @Getter
     @Setter
     @OneToOne
     private User administrator;
-    
+
+    @Version
+    @Getter
+    @Setter
+    private Integer version = 0; 
 }

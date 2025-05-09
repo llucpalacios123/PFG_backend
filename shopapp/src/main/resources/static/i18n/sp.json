@@ -10,6 +10,7 @@
     "Crafts": "Artesanía",
     "logoAlt": "Logo",
     "searchPlaceholder": "Buscar en wallfri",
+    "company": "Empresa",
     "userMenu": {
         "userSection": "Sección de usuario",
         "options": "Opciones",
@@ -28,7 +29,8 @@
         "company": "Empresa",
         "user": "Usuario",
         "orders": "Pedidos",
-        "login": "Iniciar sesión"
+        "login": "Iniciar sesión",
+        "createCompany": "Crear empresa"
     },
     "errors": {
         "noUserId": "No se encontró el identificador de usuario.",
@@ -61,5 +63,133 @@
         "success": {
           "passwordChanged": "Contrasenya canviada correctament!"
         }
+      },
+      
+      "createCompany": {
+        "title": "Crear Empresa",
+        "nameLabel": "Nombre de la empresa",
+        "namePlaceholder": "Introduce el nombre de la empresa",
+        "nameError": "El nombre de la empresa es obligatorio",
+        "descriptionLabel": "Descripción",
+        "descriptionPlaceholder": "Introduce una descripción de la empresa",
+        "descriptionError": "La descripción es obligatoria",
+        "submitButton": "Crear"
+      },
+      "companyProductsPage": {
+        "title": "Productos de la Empresa",
+        "createProductButton": "Crear Producto",
+        "filterPlaceholder": "Filtrar por nombre, categoría o subcategoría",
+        "columns": {
+          "name": "Nombre",
+          "image": "Imagen",
+          "category": "Categoría",
+          "subcategory": "Subcategoría",
+          "stock": "Stock"
+        }
+      },
+      "addProductPage": {
+        "title": "Añadir Producto",
+        "productName": "Nombre del Producto",
+        "description": "Descripción",
+        "category": "Categoría",
+        "sustainableCategory": "Categoría Sostenible",
+        "addPhotos": "Añadir Fotos",
+        "selectedPhotos": "Fotos seleccionadas:",
+        "submitButton": "Añadir Producto",
+        "selectCategory": "Selecciona una categoría",
+        "selectSustainableCategory": "Selecciona una categoría sostenible",
+        "electronics": "Electrónica",
+        "clothing": "Ropa",
+        "furniture": "Muebles",
+        "recyclable": "Reciclable",
+        "organic": "Orgánico",
+        "energyEfficient": "Eficiencia energética",
+        "cost": "Coste",
+        "taxes": "Impuestos",
+        "productCost": "Coste del Producto",
+        "optional": "Opcional"
+      },
+      "addProductForm": {
+        "title": "Añadir Producto",
+        "nameLabel": "Nombre del Producto",
+        "namePlaceholder": "Introduce el nombre del producto",
+        "descriptionLabel": "Descripción",
+        "descriptionPlaceholder": "Introduce la descripción del producto",
+        "categoryLabel": "Categoría",
+        "categoryPlaceholder": "Selecciona una categoría",
+        "sustainableCategoryLabel": "Categorías Sostenibles",
+        "sustainableCategoryPlaceholder": "Selecciona categorías sostenibles",
+        "pricingLabel": "Precios",
+        "photoUploadLabel": "Subir Fotos",
+        "submitSuccess": "¡Producto añadido con éxito!",
+        "submitButton": "Crear Producto",
+        "cancelButton": "Cancelar",
+        "errorMissingName": "Por favor, proporciona al menos un nombre de producto.",
+        "errorMissingDescription": "Por favor, proporciona al menos una descripción del producto.",
+        "errorMissingCategory": "Por favor, selecciona una categoría.",
+        "errorMissingPricing": "Por favor, añade al menos un valor de precio."
+      },
+      "productSinglePrice": {
+        "title": "Precio Único",
+        "costLabel": "Costo",
+        "costPlaceholder": "p. ej., 10.50",
+        "priceLabel": "Precio",
+        "pricePlaceholder": "p. ej., 15.00",
+        "stockLabel": "Stock",
+        "stockPlaceholder": "p. ej., 100"
+      },
+      "productPricing": {
+        "title": "Precios del Producto",
+        "taxesLabel": "Tasas",
+        "taxesPlaceholder": "Introduce las tasas (p. ej., 21%)",
+        "switchToMulti": "Cambiar a Precios Múltiples",
+        "switchToSingle": "Cambiar a Precio Único"
+      },
+      "productPhotoUpload": {
+        "label": "Subir Fotos",
+        "selectedPhotos": "Fotos Seleccionadas"
+      },
+      "productName": {
+        "title": "Nombre",
+        "addTranslations": "Añadir Traducciones",
+        "hideTranslations": "Ocultar Traducciones",
+        "placeholder": "Introduce el nombre del producto"
+      },
+      "languages": {
+        "english": "Inglés",
+        "spanish": "Español",
+        "catalan": "Catalán"
+      },
+      "productDescription": {
+        "title": "Descripción",
+        "addTranslations": "Añadir Traducciones",
+        "hideTranslations": "Ocultar Traducciones",
+        "placeholder": "Introduce la descripción del producto"
+      },
+      "productCategories": {
+        "title": "Categoría",
+        "selectPlaceholder": "Selecciona una categoría",
+        "noCategories": "No hay categorías disponibles",
+        "sustainableTitle": "Categorías Sostenibles",
+        "selected": "Categorías Seleccionadas",
+        "noneSelected": "Ninguna"
+      },
+      "productMultiPrice": {
+        "title": "Precios Múltiples",
+        "categoryLabel": "Categoría",
+        "noValuesMessage": "No se han añadido valores todavía.",
+        "categoryNameLabel": "Nombre de la Categoría",
+        "categoryNamePlaceholder": "p. ej., Talla",
+        "categoryValueLabel": "Valor de la Categoría",
+        "categoryValuePlaceholder": "p. ej., XL",
+        "priceLabel": "Precio",
+        "pricePlaceholder": "p. ej., 15.00",
+        "costLabel": "Costo",
+        "costPlaceholder": "p. ej., 10.50",
+        "stockLabel": "Stock",
+        "stockPlaceholder": "p. ej., 100",
+        "addValueButton": "Añadir Valor",
+        "addedValuesTitle": "Valores Añadidos",
+        "addedValuesFormat": "Categoría: {category}, Precio: {price}, Costo: {cost}, Stock: {stock}"
       }
 }

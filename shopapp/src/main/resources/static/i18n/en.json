@@ -10,6 +10,7 @@
     "Crafts": "Crafts",
     "logoAlt": "Logo",
     "searchPlaceholder": "Search on wallfri",
+    "company": "Company",
     "userMenu": {
       "userSection": "User Section",
       "options": "Options",
@@ -28,7 +29,9 @@
       "company": "Company",
       "user": "User",
       "orders": "Orders",
-        "login": "Login"
+      "login": "Login",
+      "createCompany": "Create Company"
+
   },
   "errors": {
       "noUserId": "User ID not found.",
@@ -61,7 +64,137 @@
     "success": {
       "passwordChanged": "Password changed successfully!"
     }
+  },
+  "createCompany": {
+    "title": "Create Company",
+    "nameLabel": "Company Name",
+    "namePlaceholder": "Enter the company name",
+    "nameError": "The company name is required",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Enter a description of the company",
+    "descriptionError": "The description is required",
+    "submitButton": "Create"
+  },
+  "companyProductsPage": {
+    "title": "Company Products",
+    "createProductButton": "Create Product",
+    "filterPlaceholder": "Filter by name, category, or subcategory",
+    "columns": {
+      "name": "Name",
+      "image": "Image",
+      "category": "Category",
+      "subcategory": "Subcategory",
+      "stock": "Stock"
+    },
+    "addProductPage": {
+      "title": "Add Product",
+      "productName": "Product Name",
+      "description": "Description",
+      "category": "Category",
+      "sustainableCategory": "Sustainable Category",
+      "addPhotos": "Add Photos",
+      "selectedPhotos": "Selected Photos:",
+      "submitButton": "Add Product",
+      "selectCategory": "Select a category",
+      "selectSustainableCategory": "Select a sustainable category",
+      "electronics": "Electronics",
+      "clothing": "Clothing",
+      "furniture": "Furniture",
+      "recyclable": "Recyclable",
+      "organic": "Organic",
+      "energyEfficient": "Energy Efficient",
+      "cost": "Cost",
+      "taxes": "Taxes",
+      "productCost": "Product Cost",
+      "optional": "Optional"
+      
+    }
+  },
+  "addProductForm": {
+    "title": "Add Product",
+    "nameLabel": "Product Name",
+    "namePlaceholder": "Enter the product name",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Enter the product description",
+    "categoryLabel": "Category",
+    "categoryPlaceholder": "Select a category",
+    "sustainableCategoryLabel": "Sustainable Categories",
+    "sustainableCategoryPlaceholder": "Select sustainable categories",
+    "pricingLabel": "Pricing",
+    "photoUploadLabel": "Upload Photos",
+    "submitSuccess": "Product added successfully!",
+    "submitButton": "Create Product",
+    "cancelButton": "Cancel",
+    "errorMissingName": "Please provide at least one product name.",
+    "errorMissingDescription": "Please provide at least one product description.",
+    "errorMissingCategory": "Please select a category.",
+    "errorMissingPricing": "Please add at least one pricing value."
+  },
+  "productSinglePrice": {
+    "title": "Single Price",
+    "costLabel": "Cost",
+    "costPlaceholder": "e.g., 10.50",
+    "priceLabel": "Price",
+    "pricePlaceholder": "e.g., 15.00",
+    "stockLabel": "Stock",
+    "stockPlaceholder": "e.g., 100"
+  },
+  "productPricing": {
+    "title": "Product Pricing",
+    "taxesLabel": "Taxes",
+    "taxesPlaceholder": "Enter taxes (e.g., 21%)",
+    "switchToMulti": "Switch to Multi Pricing",
+    "switchToSingle": "Switch to Single Pricing"
+  },
+  "productPhotoUpload": {
+    "label": "Upload Photos",
+    "selectedPhotos": "Selected Photos"
+  },
+  "productName": {
+    "title": "Name",
+    "addTranslations": "Add Translations",
+    "hideTranslations": "Hide Translations",
+    "placeholder": "Enter the product name"
+  },
+  "languages": {
+    "english": "English",
+    "spanish": "Spanish",
+    "catalan": "Catalan"
+  },
+  "productDescription": {
+    "title": "Description",
+    "addTranslations": "Add Translations",
+    "hideTranslations": "Hide Translations",
+    "placeholder": "Enter the product description"
+  },
+  "productCategories": {
+    "title": "Category",
+    "selectPlaceholder": "Select a category",
+    "noCategories": "No categories available",
+    "sustainableTitle": "Sustainable Categories",
+    "selected": "Selected Categories",
+    "noneSelected": "None"
+  },
+  "productMultiPrice": {
+    "title": "Multi Price",
+    "categoryLabel": "Category",
+    "noValuesMessage": "No values have been added yet.",
+    "categoryNameLabel": "Category Name",
+    "categoryNamePlaceholder": "e.g., Size",
+    "categoryValueLabel": "Category Value",
+    "categoryValuePlaceholder": "e.g., XL",
+    "priceLabel": "Price",
+    "pricePlaceholder": "e.g., 15.00",
+    "costLabel": "Cost",
+    "costPlaceholder": "e.g., 10.50",
+    "stockLabel": "Stock",
+    "stockPlaceholder": "e.g., 100",
+    "addValueButton": "Add Value",
+    "addedValuesTitle": "Added Values",
+    "addedValuesFormat": "Category: {category}, Price: {price}, Cost: {cost}, Stock: {stock}"
   }
+
+
   }
 
   

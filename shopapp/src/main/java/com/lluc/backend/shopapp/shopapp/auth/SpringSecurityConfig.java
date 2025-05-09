@@ -56,10 +56,13 @@ public class SpringSecurityConfig{
             .authorizeHttpRequests((requests) -> requests
                 .requestMatchers(HttpMethod.GET,"/i18n/**").permitAll() 
                 .requestMatchers(HttpMethod.POST,"/users").permitAll()
+                .requestMatchers(HttpMethod.POST,"/categories").permitAll()
                 .requestMatchers(HttpMethod.GET,"/users").hasAnyRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT,"/users/changepswd").hasAnyRole("USER", "ADMIN")
                 .requestMatchers(HttpMethod.PUT,"/users/update").hasAnyRole("USER", "ADMIN")
-                .anyRequest().authenticated() // Requerir autenticación para cualquier otra solicitud
+                .requestMatchers(HttpMethod.POST,"/company").hasAnyRole("USER", "ADMIN")
+                .requestMatchers(HttpMethod.POST, "/products").hasAnyRole("USER", "ADMIN")
+                .anyRequest().authenticated()
             )
             .csrf(config -> config.disable())// Desactivar CSRF para simplificar (no recomendado en producción)
             .sessionManagement(managment -> managment.sessionCreationPolicy(SessionCreationPolicy.STATELESS))// Usar sesiones sin estado

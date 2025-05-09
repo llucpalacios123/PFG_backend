@@ -10,6 +10,7 @@
   "Crafts": "Artesania",
   "logoAlt": "Logo",
   "searchPlaceholder": "Cerca a wallfri",
+  "company": "Empresa",
   "userMenu": {
     "userSection": "Secció d'usuari",
     "options": "Opcions",
@@ -28,7 +29,8 @@
     "company": "Empresa",
     "user": "Usuari",
     "orders": "Comandes",
-    "login": "Iniciar sessió"
+    "login": "Iniciar sessió",
+    "createCompany": "Crear empresa"
   },
   "errors": {
     "noUserId": "No s'ha trobat l'identificador d'usuari.",
@@ -61,5 +63,136 @@
     "success": {
       "passwordChanged": "Contrasenya canviada correctament!"
     }
-  }
+  },
+
+  
+    "createCompany": {
+      "title": "Crear Empresa",
+      "nameLabel": "Nom de l'empresa",
+      "namePlaceholder": "Introdueix el nom de l'empresa",
+      "nameError": "El nom de l'empresa és obligatori",
+      "descriptionLabel": "Descripció",
+      "descriptionPlaceholder": "Introdueix una descripció de l'empresa",
+      "descriptionError": "La descripció és obligatòria",
+      "submitButton": "Crear"
+    },
+    "companyProductsPage": {
+      "title": "Productes de l'Empresa",
+      "createProductButton": "Crear Producte",
+      "filterPlaceholder": "Filtrar per nom, categoria o subcategoria",
+      "columns": {
+        "name": "Nom",
+        "image": "Imatge",
+        "category": "Categoria",
+        "subcategory": "Subcategoria",
+        "stock": "Estoc"
+      }
+    },
+    "addProductPage": {
+      "title": "Afegir Producte",
+      "productName": "Nom del Producte",
+      "description": "Descripció",
+      "category": "Categoria",
+      "sustainableCategory": "Categoria Sostenible",
+      "addPhotos": "Afegir Fotos",
+      "selectedPhotos": "Fotos seleccionades:",
+      "submitButton": "Afegir Producte",
+      "selectCategory": "Selecciona una categoria",
+      "selectSustainableCategory": "Selecciona una categoria sostenible",
+      "electronics": "Electrònica",
+      "clothing": "Roba",
+      "furniture": "Mobles",
+      "recyclable": "Reciclable",
+      "organic": "Orgànic",
+      "energyEfficient": "Eficiència energètica",
+      "cost": "Cost",
+      "taxes": "Impostos",
+      "productCost": "Cost del Producte",
+      "optional": "Opcional"
+    },
+    "addProductForm": {
+      "title": "Afegir Producte",
+      "nameLabel": "Nom del Producte",
+      "namePlaceholder": "Introdueix el nom del producte",
+      "descriptionLabel": "Descripció",
+      "descriptionPlaceholder": "Introdueix la descripció del producte",
+      "categoryLabel": "Categoria",
+      "categoryPlaceholder": "Selecciona una categoria",
+      "sustainableCategoryLabel": "Categories Sostenibles",
+      "sustainableCategoryPlaceholder": "Selecciona categories sostenibles",
+      "pricingLabel": "Preus",
+      "photoUploadLabel": "Pujar Fotos",
+      "submitSuccess": "Producte afegit amb èxit!",
+      "submitButton": "Crear Producte",
+      "cancelButton": "Cancel·lar",
+      "errorMissingName": "Si us plau, proporciona almenys un nom de producte.",
+      "errorMissingDescription": "Si us plau, proporciona almenys una descripció del producte.",
+      "errorMissingCategory": "Si us plau, selecciona una categoria.",
+      "errorMissingPricing": "Si us plau, afegeix almenys un valor de preu."
+    },
+    "productSinglePrice": {
+      "title": "Preu Únic",
+      "costLabel": "Cost",
+      "costPlaceholder": "p. ex., 10.50",
+      "priceLabel": "Preu",
+      "pricePlaceholder": "p. ex., 15.00",
+      "stockLabel": "Estoc",
+      "stockPlaceholder": "p. ex., 100"
+    },
+    "productPricing": {
+      "title": "Preus del Producte",
+      "taxesLabel": "Taxes",
+      "taxesPlaceholder": "Introdueix les taxes (p. ex., 21%)",
+      "switchToMulti": "Canvia a Preus Múltiples",
+      "switchToSingle": "Canvia a Preu Únic"
+    },
+    "productPhotoUpload": {
+      "label": "Pujar Fotos",
+      "selectedPhotos": "Fotos Seleccionades"
+    },
+    "productName": {
+      "title": "Nom",
+      "addTranslations": "Afegir Traduccions",
+      "hideTranslations": "Amagar Traduccions",
+      "placeholder": "Introdueix el nom del producte"
+    },
+    "languages": {
+      "english": "Anglès",
+      "spanish": "Espanyol",
+      "catalan": "Català"
+    },
+    "productDescription": {
+      "title": "Descripció",
+      "addTranslations": "Afegir Traduccions",
+      "hideTranslations": "Amagar Traduccions",
+      "placeholder": "Introdueix la descripció del producte"
+    },
+    "productCategories": {
+      "title": "Categoria",
+      "selectPlaceholder": "Selecciona una categoria",
+      "noCategories": "No hi ha categories disponibles",
+      "sustainableTitle": "Categories Sostenibles",
+      "selected": "Categories Seleccionades",
+      "noneSelected": "Cap"
+    },
+    "productMultiPrice": {
+      "title": "Preus Múltiples",
+      "categoryLabel": "Categoria",
+      "noValuesMessage": "Encara no s'han afegit valors.",
+      "categoryNameLabel": "Nom de la Categoria",
+      "categoryNamePlaceholder": "p. ex., Talla",
+      "categoryValueLabel": "Valor de la Categoria",
+      "categoryValuePlaceholder": "p. ex., XL",
+      "priceLabel": "Preu",
+      "pricePlaceholder": "p. ex., 15.00",
+      "costLabel": "Cost",
+      "costPlaceholder": "p. ex., 10.50",
+      "stockLabel": "Estoc",
+      "stockPlaceholder": "p. ex., 100",
+      "addValueButton": "Afegir Valor",
+      "addedValuesTitle": "Valors Afegits",
+      "addedValuesFormat": "Categoria: {category}, Preu: {price}, Cost: {cost}, Estoc: {stock}"
+    }
+  
+
 }
