@@ -24,7 +24,7 @@ public class SustainableCategory {
     public void setId(Long id) {
         this.id = id;
     }
-
+    
     public List<SustainableCategoryTranslation> getTranslations() {
         return translations;
     }

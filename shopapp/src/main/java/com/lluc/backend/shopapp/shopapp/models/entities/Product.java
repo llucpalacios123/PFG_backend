@@ -1,11 +1,14 @@
 package com.lluc.backend.shopapp.shopapp.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -20,12 +23,15 @@ public class Product {
     @Getter
     @Setter
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductTranslation> translations; // Nombre y descripción en diferentes idiomas
+    @JsonManagedReference("product-translation") // Nombre único para esta relación
+    private List<ProductTranslation> translations;
 
     @Getter
     @Setter
     @ManyToOne
-    private Category category; // Categoría principal del producto
+    @JoinColumn(name = "category_id")
+    @JsonBackReference("category-product") // Nombre único para esta relación
+    private Category category;
 
     @Getter
     @Setter
@@ -50,10 +56,24 @@ public class Product {
     @Setter
     @ManyToOne
     @JoinColumn(name = "company_id")
-    private Company company; // Relación con la entidad Company
+    @JsonBackReference // Marca esta relación como la parte "inversa"
+    private Company company;
 
     @Getter
     @Setter
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Pricing> pricing; // Lista de precios personalizados
+    @JsonManagedReference("product-pricing") // Nombre único para esta relación
+    private List<Pricing> pricing;
+
+    @Getter
+    @Setter
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime fechaAlta;
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.fechaAlta == null) {
+            this.fechaAlta = LocalDateTime.now(); // Establece la fecha actual al crear el producto
+        }
+    }
 }

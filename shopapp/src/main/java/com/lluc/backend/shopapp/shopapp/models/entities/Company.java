@@ -2,6 +2,8 @@ package com.lluc.backend.shopapp.shopapp.models.entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -52,6 +54,7 @@ public class Company {
     @Getter
     @Setter
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference // Marca esta relación como la parte "gestora"
     private List<Product> products;
 
     @Getter

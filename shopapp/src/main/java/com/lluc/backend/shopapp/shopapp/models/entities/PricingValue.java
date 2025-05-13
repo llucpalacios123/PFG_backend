@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "pricing_value") // Asegúrate de que el nombre de la tabla sea consistente
 public class PricingValue {
@@ -37,6 +39,7 @@ public class PricingValue {
     @Getter
     @Setter
     @ManyToOne(fetch = FetchType.LAZY) // Usa carga diferida para optimizar el rendimiento
-    @JoinColumn(name = "pricing_id", nullable = false) // Asegura que la relación sea obligatoria
+    @JoinColumn(name = "pricing_id", nullable = false)
+    @JsonBackReference("pricing-value")
     private Pricing pricing; // Relación con la entidad Pricing
 }

@@ -1,5 +1,6 @@
 package com.lluc.backend.shopapp.shopapp.controllers;
 
+import com.lluc.backend.shopapp.shopapp.models.dto.ProductDTO;
 import com.lluc.backend.shopapp.shopapp.models.entities.Product;
 import com.lluc.backend.shopapp.shopapp.models.request.ProductRequest;
 import com.lluc.backend.shopapp.shopapp.services.interfaces.ProductService;
@@ -34,22 +35,22 @@ public class ProductController {
     }
     // Obtener un producto por su ID
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        Product product = productService.getById(id);
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
+        ProductDTO product = productService.getById(id);
         return ResponseEntity.ok(product);
     }
 
     // Obtener todos los productos de una empresa específica
     @GetMapping("/company/{companyId}")
-    public ResponseEntity<List<Product>> getProductsByCompany(@PathVariable Long companyId) {
-        List<Product> products = productService.getProductsByCompany(companyId);
+    public ResponseEntity<List<ProductDTO>> getProductsByCompany(@PathVariable Long companyId) {
+        List<ProductDTO> products = productService.getProductsByCompany(companyId);
         return ResponseEntity.ok(products);
     }
 
     // Obtener todos los productos de una categoría específica
     @GetMapping("/category/{categoryId}")
-    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable Long categoryId) {
-        List<Product> products = productService.getProductsByCategory(categoryId);
+    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable Long categoryId) {
+        List<ProductDTO> products = productService.getProductsByCategory(categoryId);
         return ResponseEntity.ok(products);
     }
 

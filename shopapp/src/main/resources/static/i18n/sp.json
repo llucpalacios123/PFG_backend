@@ -75,40 +75,28 @@
         "descriptionError": "La descripción es obligatoria",
         "submitButton": "Crear"
       },
-      "companyProductsPage": {
-        "title": "Productos de la Empresa",
-        "createProductButton": "Crear Producto",
-        "filterPlaceholder": "Filtrar por nombre, categoría o subcategoría",
-        "columns": {
-          "name": "Nombre",
-          "image": "Imagen",
-          "category": "Categoría",
-          "subcategory": "Subcategoría",
-          "stock": "Stock"
-        }
-      },
-      "addProductPage": {
-        "title": "Añadir Producto",
-        "productName": "Nombre del Producto",
-        "description": "Descripción",
-        "category": "Categoría",
-        "sustainableCategory": "Categoría Sostenible",
-        "addPhotos": "Añadir Fotos",
-        "selectedPhotos": "Fotos seleccionadas:",
-        "submitButton": "Añadir Producto",
-        "selectCategory": "Selecciona una categoría",
-        "selectSustainableCategory": "Selecciona una categoría sostenible",
-        "electronics": "Electrónica",
-        "clothing": "Ropa",
-        "furniture": "Muebles",
-        "recyclable": "Reciclable",
-        "organic": "Orgánico",
-        "energyEfficient": "Eficiencia energética",
-        "cost": "Coste",
-        "taxes": "Impuestos",
-        "productCost": "Coste del Producto",
-        "optional": "Opcional"
-      },
+      
+      
+        "companyProductsPage": {
+          "title": "Productos de la empresa",
+          "createProductButton": "Crear producto",
+          "filterPlaceholder": "Buscar...",
+          "columns": {
+            "name": "Nombre",
+            "image": "Imagen",
+            "category": "Categoría",
+            "stock": "Stock",
+            "fechaAlta": "Fecha de alta",
+            "actions": "Acciones"
+          },
+          "actionsButton": "Acciones",
+          "actions": {
+            "edit": "Editar",
+            "editStock": "Editar stock",
+            "deactivate": "Dar de baja"
+          },
+          "noDate": "Sin fecha"
+        },
       "addProductForm": {
         "title": "Añadir Producto",
         "nameLabel": "Nombre del Producto",

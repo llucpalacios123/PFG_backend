@@ -77,16 +77,24 @@
       "submitButton": "Crear"
     },
     "companyProductsPage": {
-      "title": "Productes de l'Empresa",
-      "createProductButton": "Crear Producte",
-      "filterPlaceholder": "Filtrar per nom, categoria o subcategoria",
+      "title": "Productes de l'empresa",
+      "createProductButton": "Crear producte",
+      "filterPlaceholder": "Cerca...",
       "columns": {
         "name": "Nom",
         "image": "Imatge",
         "category": "Categoria",
-        "subcategory": "Subcategoria",
-        "stock": "Estoc"
-      }
+        "stock": "Estoc",
+        "fechaAlta": "Data d'alta",
+        "actions": "Accions"
+      },
+      "actionsButton": "Accions",
+      "actions": {
+        "edit": "Editar",
+        "editStock": "Editar estoc",
+        "deactivate": "Donar de baixa"
+      },
+      "noDate": "Sense data"
     },
     "addProductPage": {
       "title": "Afegir Producte",

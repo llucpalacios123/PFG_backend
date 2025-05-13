@@ -1,5 +1,6 @@
 package com.lluc.backend.shopapp.shopapp.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -16,9 +17,10 @@ public class ProductTranslation {
     private String description; // Descripción del producto en el idioma correspondiente
 
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product; // Producto al que pertenece la traducción
-
+    @JoinColumn(name = "product_id")
+    @JsonBackReference("product-translation") // Nombre único para esta relación
+    private Product product;
+    
     // Getters y Setters
     public Long getId() {
         return id;

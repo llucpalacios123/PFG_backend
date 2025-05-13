@@ -6,6 +6,7 @@ import com.lluc.backend.shopapp.shopapp.models.dto.PricingDTO;
 import com.lluc.backend.shopapp.shopapp.models.entities.Product;
 import com.lluc.backend.shopapp.shopapp.models.entities.ProductTranslation;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class DTOMapperProduct {
@@ -36,6 +37,8 @@ public class DTOMapperProduct {
                 .map(DTOMapperPricing::toPricingDTO)
                 .collect(Collectors.toList())
         );
+        productDTO.setCompanyId(product.getCompany() != null ? product.getCompany().getId() : null);
+        productDTO.setFechaAlta(product.getFechaAlta());
 
         return productDTO;
     }
@@ -88,5 +91,24 @@ public class DTOMapperProduct {
         translation.setDescription(translationDTO.getDescription());
 
         return translation;
+    }
+
+    public static List<ProductDTO> toProductDTOList(List<Product> products) {
+        if (products == null || products.isEmpty()) {
+            return List.of(); 
+        }
+
+        return products.stream()
+                .map(DTOMapperProduct::toProductDTO)
+                .collect(Collectors.toList());
+    }
+    public static List<Product> toProductEntityList(List<ProductDTO> productDTOs) {
+        if (productDTOs == null || productDTOs.isEmpty()) {
+            return List.of(); 
+        }
+
+        return productDTOs.stream()
+                .map(DTOMapperProduct::toProductEntity)
+                .collect(Collectors.toList());
     }
 }

@@ -6,6 +6,10 @@ import lombok.Setter;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class Pricing {
 
@@ -20,11 +24,13 @@ public class Pricing {
     @Getter
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false) // Relación con Product
+    @JoinColumn(name = "product_id", nullable = false)
+    @JsonBackReference("product-pricing") // Nombre único para esta relación
     private Product product;
 
     @Getter
     @Setter
     @OneToMany(mappedBy = "pricing", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("pricing-value") 
     private List<PricingValue> values; // Lista de valores específicos
 }

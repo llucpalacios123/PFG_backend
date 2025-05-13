@@ -7,6 +7,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lluc.backend.shopapp.shopapp.models.dto.ProductDTO;
+import com.lluc.backend.shopapp.shopapp.models.dto.mapper.DTOMapperPricing;
+import com.lluc.backend.shopapp.shopapp.models.dto.mapper.DTOMapperProduct;
 import com.lluc.backend.shopapp.shopapp.models.entities.Company;
 import com.lluc.backend.shopapp.shopapp.models.entities.Pricing;
 import com.lluc.backend.shopapp.shopapp.models.entities.PricingValue;
@@ -22,8 +25,6 @@ import com.lluc.backend.shopapp.shopapp.services.interfaces.ProductService;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private final ProductService productService;
-
     @Autowired
     private final ProductRepository productRepository;
 
@@ -37,12 +38,11 @@ public class ProductServiceImpl implements ProductService {
     private final CompanyRepository companyRepository;
 
     public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository, 
-                              SustainableCategoryRepository sustainableCategoryRepository, CompanyRepository companyRepository, ProductService productService) {
+                              SustainableCategoryRepository sustainableCategoryRepository, CompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
         this.sustainableCategoryRepository = sustainableCategoryRepository;
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
-        this.productService = productService;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public Product add(ProductRequest productRequest) {
+    public ProductDTO add(ProductRequest productRequest) {
         // Recuperar el usuario autenticado
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         System.out.println("Usuario autenticado: " + username);
@@ -106,26 +106,27 @@ public class ProductServiceImpl implements ProductService {
             }).toList());
         }
 
-    return productRepository.save(product);
+    return DTOMapperProduct.toProductDTO(productRepository.save(product));
 }
 
     @Override
     @Transactional(readOnly = true)
-    public Product getById(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product with ID " + id + " not found"));
+    public ProductDTO getById(Long id) {
+        return DTOMapperProduct.toProductDTO(productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product with ID " + id + " not found")));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Product> getProductsByCompany(Long companyId) {
-        return productRepository.findByCompanyId(companyId);
+    public List<ProductDTO> getProductsByCompany(Long companyId) {
+        return DTOMapperProduct.toProductDTOList(productRepository.findByCompanyId(companyId));
+        
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Product> getProductsByCategory(Long categoryId) {
-        return productRepository.findByCategoryId(categoryId);
+    public List<ProductDTO> getProductsByCategory(Long categoryId) {
+        return DTOMapperProduct.toProductDTOList(productRepository.findByCategoryId(categoryId));
     }
 
     @Override

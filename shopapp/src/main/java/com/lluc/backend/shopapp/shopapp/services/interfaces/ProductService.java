@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.lluc.backend.shopapp.shopapp.models.dto.ProductDTO;
 import com.lluc.backend.shopapp.shopapp.models.entities.Product;
 import com.lluc.backend.shopapp.shopapp.models.request.ProductRequest;
 
@@ -14,16 +15,16 @@ public interface ProductService {
     List<Product> findAll();
 
     // Agregar un nuevo producto
-    Product add(ProductRequest product);
+    ProductDTO add(ProductRequest product);
 
     // Obtener un producto por su ID
-    Product getById(Long id);
+    ProductDTO getById(Long id);
 
     // Obtener todos los productos de una empresa específica
-    List<Product> getProductsByCompany(Long companyId);
+    List<ProductDTO> getProductsByCompany(Long companyId);
 
     // Obtener todos los productos de una categoría específica
-    List<Product> getProductsByCategory(Long categoryId);
+    List<ProductDTO> getProductsByCategory(Long categoryId);
 
     // Modificar un producto existente
     Product update(Long id, Product product);

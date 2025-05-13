@@ -78,37 +78,22 @@
   "companyProductsPage": {
     "title": "Company Products",
     "createProductButton": "Create Product",
-    "filterPlaceholder": "Filter by name, category, or subcategory",
+    "filterPlaceholder": "Search...",
     "columns": {
       "name": "Name",
       "image": "Image",
       "category": "Category",
-      "subcategory": "Subcategory",
-      "stock": "Stock"
+      "stock": "Stock",
+      "fechaAlta": "Date Added",
+      "actions": "Actions"
     },
-    "addProductPage": {
-      "title": "Add Product",
-      "productName": "Product Name",
-      "description": "Description",
-      "category": "Category",
-      "sustainableCategory": "Sustainable Category",
-      "addPhotos": "Add Photos",
-      "selectedPhotos": "Selected Photos:",
-      "submitButton": "Add Product",
-      "selectCategory": "Select a category",
-      "selectSustainableCategory": "Select a sustainable category",
-      "electronics": "Electronics",
-      "clothing": "Clothing",
-      "furniture": "Furniture",
-      "recyclable": "Recyclable",
-      "organic": "Organic",
-      "energyEfficient": "Energy Efficient",
-      "cost": "Cost",
-      "taxes": "Taxes",
-      "productCost": "Product Cost",
-      "optional": "Optional"
-      
-    }
+    "actionsButton": "Actions",
+    "actions": {
+      "edit": "Edit",
+      "editStock": "Edit Stock",
+      "deactivate": "Deactivate"
+    },
+    "noDate": "No Date"
   },
   "addProductForm": {
     "title": "Add Product",
