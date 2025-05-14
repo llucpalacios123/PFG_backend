@@ -9,7 +9,10 @@ import com.lluc.backend.shopapp.shopapp.repositories.RoleRepository;
 import com.lluc.backend.shopapp.shopapp.repositories.UsersRepository;
 import com.lluc.backend.shopapp.shopapp.services.interfaces.UserService;
 
+import jakarta.validation.constraints.Email;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -36,6 +39,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    private EmailService emailService;
 
     public UserServiceImpl(UsersRepository usersRepository, RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
@@ -73,7 +79,21 @@ public class UserServiceImpl implements UserService {
 
         user.setRoles(roles);
 
-        return DTOMapperUser.toDTO(usersRepository.save(user));
+        User userSaved = usersRepository.save(user);
+
+        List<GrantedAuthority> authorities = roles.stream()
+                .map(r -> new SimpleGrantedAuthority(r.getName()))
+                .collect(Collectors.toList());
+        String token = jwtTokenProvider.generateToken(userSaved.getId(), userSaved.getUsername(), authorities, user.getEmpresa() != null, true);
+
+         // Enviar el correo de confirmación
+         String verificationLink = "http://localhost:8080/auth/verify?token=" + token;
+         String subject = "Verificación de cuenta";
+         String body = "Hola " + user.getUsername() + ",\n\nHaz clic en el siguiente enlace para verificar tu cuenta:\n" + verificationLink;
+ 
+         emailService.sendRegistrationEmail(user.getEmail(), subject, body);
+
+        return DTOMapperUser.toDTO(userSaved);
     }
 
     private UserDTO updateUser(User user) {
@@ -110,7 +130,7 @@ public class UserServiceImpl implements UserService {
             .stream()
             .map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
 
-            newToken = jwtTokenProvider.generateToken(updatedUser.getId(), updatedUser.getUsername(), authorities, user.getEmpresa() != null);
+            newToken = jwtTokenProvider.generateToken(updatedUser.getId(), updatedUser.getUsername(), authorities, user.getEmpresa() != null, false);
         }
 
         // Convert the updated user to DTO

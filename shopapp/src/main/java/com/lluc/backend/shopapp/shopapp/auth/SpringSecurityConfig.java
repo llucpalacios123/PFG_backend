@@ -67,6 +67,7 @@ public class SpringSecurityConfig{
                 .requestMatchers(HttpMethod.POST,"/categories").permitAll()
                 .requestMatchers(HttpMethod.POST, "images/upload").hasAnyRole("USER", "ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "images/delete/{key}").hasAnyRole("USER", "ADMIN")
+                .requestMatchers(HttpMethod.GET, "/auth/verify").permitAll()
                 .anyRequest().authenticated()
             )
             .csrf(config -> config.disable())// Desactivar CSRF para simplificar (no recomendado en producción)

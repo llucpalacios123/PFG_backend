@@ -71,4 +71,6 @@ public class User {
     inverseJoinColumns = @JoinColumn(name = "role_id"),
     uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "role_id"}))
     @Getter @Setter private List<Role> roles;
+
+    @Getter @Setter private Boolean verified = false;
 }

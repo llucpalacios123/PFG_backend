@@ -69,7 +69,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             .collect(Collectors.toList()); // Convert Collection to List
         
     
-        String token = jwtTokenProvider.generateToken(userId, username, authorities, principal.isHasCompany());
+        String token = jwtTokenProvider.generateToken(userId, username, authorities, principal.isHasCompany(), false);
     
         // Agregar el token al encabezado de la respuesta
         response.addHeader(HEADER_AUTHORIZATION, PREFIX_TOKEN + token);
