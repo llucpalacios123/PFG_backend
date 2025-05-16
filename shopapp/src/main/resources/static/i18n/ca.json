@@ -200,7 +200,61 @@
       "addValueButton": "Afegir Valor",
       "addedValuesTitle": "Valors Afegits",
       "addedValuesFormat": "Categoria: {category}, Preu: {price}, Cost: {cost}, Estoc: {stock}"
+    },
+    "loading": "Carregant...",
+    "registerForm": {
+      "firstName": "Nom",
+      "lastName": "Cognom",
+      "username": "Nom d'usuari",
+      "email": "Correu electrònic",
+      "password": "Contrasenya",
+      "submit": "Crear"
+    },
+
+    "error": {
+    "usernotverified": {
+      "title": "Usuari no verificat",
+      "message": "Si us plau, verifica el teu compte abans d'accedir."
+    },
+    "usernotfound": {
+      "title": "Usuari no trobat",
+      "message": "L'usuari introduït no existeix al sistema."
+    },
+    "generic": {
+      "title": "Error inesperat",
+      "message": "S'ha produït un error inesperat. Si us plau, torna-ho a intentar."
     }
+  },
+  "resendVerificationButton": "Reenviar correu de verificació",
+  "cancelButton": "Cancel·lar",
+  "verificationEmailSent": {
+    "title": "Correu de verificació enviat",
+    "message": "Si us plau, revisa el teu correu electrònic per verificar el teu compte."
+  },
+  "verificationEmailError": {
+    "title": "Error en reenviar el correu",
+    "message": "No s'ha pogut reenviar el correu de verificació. Si us plau, torna-ho a intentar."
+  },
+  "showProduct": {
+    "productNotFound": "Producte no trobat",
+    "productDetails": "Detalls del producte",
+    "productImages": "Imatges del producte",
+    "productPricing": {
+      "price": "Preu:",
+      "selectOption": "Selecciona una opció",
+      "selectedPrice": "Preu seleccionat:",
+      "addToCart": "Afegeix al carret",
+      "alertSelectOption": "Si us plau, selecciona una opció abans d'afegir al carret."
+    }
+  },
+  "shoppingCart": {
+    "title": "Carret de la Compra",
+    "empty": "El carret està buit",
+    "remove": "Eliminar",
+    "total": "Total",
+    "checkout": "Finalitzar compra",
+    "checkoutMessage": "Gràcies per la teva compra. Processarem la teva comanda aviat!"
+  }
   
 
 }

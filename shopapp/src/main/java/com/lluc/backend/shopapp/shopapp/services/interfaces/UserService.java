@@ -21,4 +21,8 @@ public interface UserService {
     Optional<UserDTO> findByUsername(String username);
 
     void changePassword(String username, String oldPassword, String newPassword);
+
+    Optional<User> findByEmail(String email);
+
+    void resendVerificationEmail(User user);
 }

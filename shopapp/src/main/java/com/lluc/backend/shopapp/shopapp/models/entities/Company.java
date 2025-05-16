@@ -21,7 +21,7 @@ import lombok.Setter;
 
 @Entity
 @Data
-@Table(name = "Empresa")
+@Table(name = "company")
 public class Company {
     
     @Id

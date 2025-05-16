@@ -3,12 +3,13 @@ package com.lluc.backend.shopapp.shopapp.services.Implementations;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lluc.backend.shopapp.shopapp.models.dto.ProductDTO;
-import com.lluc.backend.shopapp.shopapp.models.dto.mapper.DTOMapperPricing;
 import com.lluc.backend.shopapp.shopapp.models.dto.mapper.DTOMapperProduct;
 import com.lluc.backend.shopapp.shopapp.models.entities.Company;
 import com.lluc.backend.shopapp.shopapp.models.entities.Pricing;
@@ -143,5 +144,17 @@ public class ProductServiceImpl implements ProductService {
         existingProduct.setPhotos(product.getPhotos());
 
         return productRepository.save(existingProduct);
+    }
+
+    @Override
+    public Page<ProductDTO> searchProducts(String query, List<Long> sustainableCategories, Pageable pageable) {
+        // Buscar productos que coincidan con el término de búsqueda
+
+        if (sustainableCategories != null && sustainableCategories.isEmpty()) {
+            sustainableCategories = null;
+        }
+        Page<Product> products = productRepository.findProductFiltereds(query,sustainableCategories, pageable);    
+        // Convertir a DTO
+        return products.map(product -> DTOMapperProduct.toProductDTO(product));
     }
 }

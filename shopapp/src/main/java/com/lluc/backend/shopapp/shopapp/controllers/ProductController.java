@@ -3,9 +3,14 @@ package com.lluc.backend.shopapp.shopapp.controllers;
 import com.lluc.backend.shopapp.shopapp.models.dto.ProductDTO;
 import com.lluc.backend.shopapp.shopapp.models.entities.Product;
 import com.lluc.backend.shopapp.shopapp.models.request.ProductRequest;
+import com.lluc.backend.shopapp.shopapp.models.request.ProductSearchRequest;
 import com.lluc.backend.shopapp.shopapp.services.interfaces.ProductService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,5 +64,24 @@ public class ProductController {
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
         Product updatedProduct = productService.update(id, product);
         return ResponseEntity.ok(updatedProduct);
+    }
+    @PostMapping("/search")
+    public ResponseEntity<?> searchProducts(@RequestBody ProductSearchRequest searchRequest) {
+        // Crear el objeto Pageable
+        Pageable pageable = PageRequest.of(
+                searchRequest.getPage(),
+                searchRequest.getSize(),
+                Sort.by(Sort.Order.by(searchRequest.getSort().split(",")[0])
+                        .with(Sort.Direction.fromString(searchRequest.getSort().split(",")[1])))
+        );
+
+        // Llamar al servicio con paginación
+        Page<ProductDTO> products = productService.searchProducts(
+                searchRequest.getQuery(),
+                searchRequest.getSustainableCategories(),
+                pageable
+        );
+
+        return ResponseEntity.ok(products);
     }
 }

@@ -26,7 +26,7 @@ public class ImageUploadController {
     @PostMapping("/upload")
     public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file) {
         try {
-            String imageKey = imageUploadService.uploadImage(file);
+            String imageKey = imageUploadService.uploadImage(file, "products");
             Map<String, String> response = new HashMap<>();
             response.put("url", imageKey);
             return ResponseEntity.ok(response);

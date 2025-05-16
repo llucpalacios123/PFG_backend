@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
         List<GrantedAuthority> authorities = roles.stream()
                 .map(r -> new SimpleGrantedAuthority(r.getName()))
                 .collect(Collectors.toList());
-        String token = jwtTokenProvider.generateToken(userSaved.getId(), userSaved.getUsername(), authorities, user.getEmpresa() != null, true);
+        String token = jwtTokenProvider.generateToken(userSaved.getId(), userSaved.getUsername(), authorities, user.getEmpresa() != null, true, 24*14);
 
          // Enviar el correo de confirmación
          String verificationLink = "http://localhost:8080/auth/verify?token=" + token;
@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService {
             .stream()
             .map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
 
-            newToken = jwtTokenProvider.generateToken(updatedUser.getId(), updatedUser.getUsername(), authorities, user.getEmpresa() != null, false);
+            newToken = jwtTokenProvider.generateToken(updatedUser.getId(), updatedUser.getUsername(), authorities, user.getEmpresa() != null, false, 2);
         }
 
         // Convert the updated user to DTO
@@ -189,5 +189,28 @@ public class UserServiceImpl implements UserService {
         // Update the password
         user.setPassword(passwordEncoder.encode(newPassword));
         usersRepository.save(user);
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return usersRepository.findByEmail(email);
+    }
+
+    @Override
+    public void resendVerificationEmail(User user) {
+        // Generar un nuevo token de verificación
+    List<GrantedAuthority> authorities = user.getRoles().stream()
+    .map(role -> new SimpleGrantedAuthority(role.getName()))
+    .collect(Collectors.toList());
+    String token = jwtTokenProvider.generateToken(user.getId(), user.getUsername(), authorities, user.getEmpresa() != null, true,24*14);
+
+    // Crear el enlace de verificación
+    String verificationLink = "http://localhost:8080/auth/verify?token=" + token;
+
+    // Enviar el correo de verificación
+    String subject = "Reenvío de verificación de cuenta";
+    String body = "Hola " + user.getUsername() + ",\n\nHaz clic en el siguiente enlace para verificar tu cuenta:\n" + verificationLink;
+
+    emailService.sendRegistrationEmail(user.getEmail(), subject, body);
     }
 }

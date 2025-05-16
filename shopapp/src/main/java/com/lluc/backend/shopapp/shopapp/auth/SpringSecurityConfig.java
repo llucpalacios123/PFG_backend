@@ -21,6 +21,7 @@ import org.springframework.web.filter.CorsFilter;
 
 import com.lluc.backend.shopapp.shopapp.auth.filters.JwtAuthenticationFilter;
 import com.lluc.backend.shopapp.shopapp.auth.filters.JwtValidationFilter;
+import com.lluc.backend.shopapp.shopapp.repositories.UsersRepository;
 
 import static com.lluc.backend.shopapp.shopapp.auth.TokenJwtConfig.*;
 
@@ -35,6 +36,9 @@ public class SpringSecurityConfig{
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    private UsersRepository usersRepository;
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -64,15 +68,19 @@ public class SpringSecurityConfig{
                 .requestMatchers(HttpMethod.POST, "/products").hasAnyRole("USER", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/products/company").hasAnyRole("USER", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/products/{id}").permitAll()
+                .requestMatchers(HttpMethod.POST, "/products/search").permitAll()
                 .requestMatchers(HttpMethod.POST,"/categories").permitAll()
+                .requestMatchers(HttpMethod.GET,"/categories").permitAll()
+                .requestMatchers(HttpMethod.GET,"/categories/sustainable").permitAll()
                 .requestMatchers(HttpMethod.POST, "images/upload").hasAnyRole("USER", "ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "images/delete/{key}").hasAnyRole("USER", "ADMIN")
+                .requestMatchers(HttpMethod.POST, "/users/resendEmail").permitAll()
                 .requestMatchers(HttpMethod.GET, "/auth/verify").permitAll()
                 .anyRequest().authenticated()
             )
             .csrf(config -> config.disable())// Desactivar CSRF para simplificar (no recomendado en producción)
             .sessionManagement(managment -> managment.sessionCreationPolicy(SessionCreationPolicy.STATELESS))// Usar sesiones sin estado
-            .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager(), jwtTokenProvider)) // Añadir el filtro de autenticación JWT
+            .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager(), jwtTokenProvider, usersRepository)) // Añadir el filtro de autenticación JWT
             .addFilter(new JwtValidationFilter(authenticationConfiguration.getAuthenticationManager(), jwtTokenProvider)) // Añadir el filtro de validación JWT
             .cors(cors-> cors.configurationSource(corsConfigurationSource())); // Configurar CORS
         return http.build();

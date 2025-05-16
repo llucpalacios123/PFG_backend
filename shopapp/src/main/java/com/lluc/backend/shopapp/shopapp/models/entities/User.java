@@ -1,6 +1,9 @@
 package com.lluc.backend.shopapp.shopapp.models.entities;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,7 +28,13 @@ import lombok.Setter;
 
 @Entity
 @Data
-@Table(name = "Users")
+@Table(
+    name = "users",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "UK_user_email", columnNames = "email"),
+        @UniqueConstraint(name = "UK_user_username", columnNames = "username")
+    }
+)
 public class User {
     
     @Version
@@ -40,27 +49,22 @@ public class User {
     @Email
     @Getter @Setter private String email;
 
-
     @NotBlank
     @Getter @Setter private String password;
-
 
     @NotBlank
     @Getter @Setter private String firstName;
 
     @NotBlank
     @Getter @Setter private String lastName;
-    
 
     @Column(unique = true)
     @NotBlank
     @Size(min = 4, max = 20)
     @Getter @Setter private String username;
 
-
     @ManyToOne
     @Getter @Setter private Company empresa;
-
 
     @OneToOne(mappedBy = "administrator")
     @Getter @Setter private Company companyAdmin;
@@ -73,4 +77,8 @@ public class User {
     @Getter @Setter private List<Role> roles;
 
     @Getter @Setter private Boolean verified = false;
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    @Getter @Setter private LocalDateTime fechaAlta; // Fecha de alta
 }

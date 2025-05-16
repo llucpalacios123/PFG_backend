@@ -5,9 +5,11 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,7 +20,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lluc.backend.shopapp.shopapp.auth.CustomUserDetails;
 import com.lluc.backend.shopapp.shopapp.auth.JwtTokenProvider;
+import com.lluc.backend.shopapp.shopapp.exceptions.UserNotFoundException;
+import com.lluc.backend.shopapp.shopapp.exceptions.UserNotVerifiedException;
 import com.lluc.backend.shopapp.shopapp.models.entities.User;
+import com.lluc.backend.shopapp.shopapp.repositories.UsersRepository;
 
 import static com.lluc.backend.shopapp.shopapp.auth.TokenJwtConfig.*;
 
@@ -29,10 +34,14 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+
+    private UsersRepository usersRepository; // Cambiar a UsersRepository
     private AuthenticationManager authenticationManager;
     private JwtTokenProvider jwtTokenProvider; // Eliminar @Autowired
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
+
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UsersRepository usersRepository) {
+        this.usersRepository = usersRepository; // Cambiar a UsersRepository
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider; // Inicializar en el constructor
     }
@@ -40,17 +49,38 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
+            // Leer el cuerpo de la solicitud para obtener el usuario y la contraseña
             User user = new ObjectMapper().readValue(request.getInputStream(), User.class);
             String username = user.getUsername();
             String password = user.getPassword();
     
             logger.info("Username: " + username + ", Password: " + password);
     
+            // Verificar si el usuario existe en la base de datos
+            User loadedUser = loadUserByUsername(username);
+    
+            // Si no existe, lanzamos una excepción controlada
+            if (loadedUser == null) {
+                throw new UserNotFoundException("Usuario no encontrado.");
+            }
+    
+            // Verificar si el usuario está verificado
+            if (!loadedUser.getVerified()) {
+                throw new UserNotVerifiedException("Usuario no verificado.", loadedUser.getEmail());
+            }
+    
+            // Crear el token de autenticación
             UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
             return authenticationManager.authenticate(authRequest);
         } catch (IOException e) {
             throw new RuntimeException("Failed to parse authentication request body", e);
         }
+    }
+    
+
+    // Método auxiliar para cargar el usuario desde la base de datos
+    private User loadUserByUsername(String username) {
+        return usersRepository.findByUsername(username).orElse(null);
     }
     
 
@@ -69,7 +99,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             .collect(Collectors.toList()); // Convert Collection to List
         
     
-        String token = jwtTokenProvider.generateToken(userId, username, authorities, principal.isHasCompany(), false);
+        String token = jwtTokenProvider.generateToken(userId, username, authorities, principal.isHasCompany(), false, 2);
     
         // Agregar el token al encabezado de la respuesta
         response.addHeader(HEADER_AUTHORIZATION, PREFIX_TOKEN + token);
@@ -86,13 +116,24 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException failed) throws IOException, ServletException {
-
+    
         Map<String, Object> body = new HashMap<>();
-        body.put("message", "Authentication failed");
-        body.put("error", failed.getMessage());
-
-        response.getWriter().write(new ObjectMapper().writeValueAsString(body));
-        response.setStatus(401);
+    
+        if (failed instanceof UserNotVerifiedException) {
+            UserNotVerifiedException exception = (UserNotVerifiedException) failed;
+            body.put("key", "error.usernotverified");
+            body.put("email", exception.getEmail()); // Incluir el correo electrónico en la respuesta
+            response.setStatus(403); // Forbidden
+        } else if (failed instanceof UserNotFoundException) {
+            body.put("key", "error.usernotfound");
+            response.setStatus(404); // Not Found
+        } else {
+            body.put("key", "error.authenticationfailed");
+            response.setStatus(401); // Unauthorized
+        }
+    
         response.setContentType("application/json");
+        response.getWriter().write(new ObjectMapper().writeValueAsString(body));
     }
+
 }

@@ -112,4 +112,30 @@ public class UserController {
         }
     }
 
+    @PostMapping("/resendEmail")
+    public ResponseEntity<?> resendEmail(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+
+        if (email == null || email.isBlank()) {
+            return ResponseEntity.badRequest().body("error.email.required"); // Clave para i18n
+        }
+
+        Optional<User> userOptional = userService.findByEmail(email);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+
+            if (user.getVerified()) {
+                return ResponseEntity.badRequest().body("error.user.already.verified"); // Clave para i18n
+            }
+
+            // Lógica para reenviar el correo de verificación
+            userService.resendVerificationEmail(user);
+
+            return ResponseEntity.ok("success.email.resent"); // Clave para i18n
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("error.user.not.found"); // Clave para i18n
+    }
+
 }

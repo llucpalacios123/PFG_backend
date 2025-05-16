@@ -2,8 +2,10 @@ package com.lluc.backend.shopapp.shopapp.services.interfaces;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Page;
 import com.lluc.backend.shopapp.shopapp.models.dto.ProductDTO;
 import com.lluc.backend.shopapp.shopapp.models.entities.Product;
 import com.lluc.backend.shopapp.shopapp.models.request.ProductRequest;
@@ -28,4 +30,6 @@ public interface ProductService {
 
     // Modificar un producto existente
     Product update(Long id, Product product);
+
+    Page<ProductDTO> searchProducts(String query, List<Long> sustainableCategories, Pageable pageable);
 }

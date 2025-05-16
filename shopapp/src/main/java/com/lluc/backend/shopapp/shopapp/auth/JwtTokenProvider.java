@@ -17,7 +17,7 @@ import static com.lluc.backend.shopapp.shopapp.auth.TokenJwtConfig.*;
 @Component
 public class JwtTokenProvider {
 
-    public String generateToken(Long userId, String username, List<? extends GrantedAuthority> authorities, boolean hasCompany, boolean verification) {
+    public String generateToken(Long userId, String username, List<? extends GrantedAuthority> authorities, boolean hasCompany, boolean verification, int expirationHours) {
         // Crear el mapa de claims
         Map<String, Object> claims = Map.of(
             "userId", userId,
@@ -30,12 +30,15 @@ public class JwtTokenProvider {
             "hasCompany", hasCompany, // Agregar si el usuario tiene empresa asociada
             "verification", verification // Agregar si el token es para verificación
         );
-
+    
+        // Calcular la fecha de expiración en milisegundos
+        Date expirationDate = new Date(System.currentTimeMillis() + expirationHours * 60 * 60 * 1000);
+    
         // Crear el token JWT
         return Jwts.builder()
             .setClaims(claims)
             .setSubject(username)
-            .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+            .setExpiration(expirationDate)
             .signWith(SECRET_KEY, SignatureAlgorithm.HS512)
             .compact();
     }

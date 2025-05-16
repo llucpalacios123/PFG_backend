@@ -179,5 +179,63 @@
         "addValueButton": "Añadir Valor",
         "addedValuesTitle": "Valores Añadidos",
         "addedValuesFormat": "Categoría: {category}, Precio: {price}, Costo: {cost}, Stock: {stock}"
+      },
+      "loading": "Cargando...",
+      "registerForm": {
+        "firstName": "Nombre",
+        "lastName": "Apellido",
+        "username": "Nombre de usuario",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "submit": "Crear"
+      },
+      
+      "error": {
+      "usernotverified": {
+        "title": "Usuario no verificado",
+        "message": "Por favor, verifica tu cuenta antes de acceder."
+      },
+      "usernotfound": {
+        "title": "Usuario no encontrado",
+        "message": "El usuario ingresado no existe en el sistema."
+      },
+      "generic": {
+        "title": "Error inesperado",
+        "message": "Se produjo un error inesperado. Por favor, inténtalo de nuevo."
       }
+    },
+    "resendVerificationButton": "Reenviar correo de verificación",
+    "cancelButton": "Cancelar",
+    "verificationEmailSent": {
+      "title": "Correo de verificación enviado",
+      "message": "Por favor, revisa tu correo electrónico para verificar tu cuenta."
+    },
+    "verificationEmailError": {
+      "title": "Error al reenviar el correo",
+      "message": "No se pudo reenviar el correo de verificación. Por favor, inténtalo de nuevo."
+    },
+    
+    "showProduct": {
+      "productNotFound": "Producto no encontrado",
+      "productDetails": "Detalles del producto",
+      "productImages": "Imágenes del producto",
+      "productPricing": {
+        "price": "Precio:",
+        "selectOption": "Selecciona una opción",
+        "selectedPrice": "Precio seleccionado:",
+        "addToCart": "Añadir al carrito",
+        "alertSelectOption": "Por favor, selecciona una opción antes de añadir al carrito."
+      }
+    },
+    "shoppingCart": {
+      "title": "Carrito de Compras",
+      "empty": "El carrito está vacío",
+      "remove": "Eliminar",
+      "total": "Total",
+      "checkout": "Realizar compra",
+      "checkoutMessage": "Gracias por tu compra. ¡Procesaremos tu pedido pronto!"
+    }
+      
+      
+    
 }

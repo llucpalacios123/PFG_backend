@@ -177,9 +177,63 @@
     "addValueButton": "Add Value",
     "addedValuesTitle": "Added Values",
     "addedValuesFormat": "Category: {category}, Price: {price}, Cost: {cost}, Stock: {stock}"
+  },
+  "loading": "Loading...",
+  "registerForm": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Create"
+  },
+  
+  "error": {
+    "usernotverified": {
+      "title": "User not verified",
+      "message": "Please verify your account before accessing."
+    },
+    "usernotfound": {
+      "title": "User not found",
+      "message": "The user entered does not exist in the system."
+    },
+    "generic": {
+      "title": "Unexpected error",
+      "message": "An unexpected error occurred. Please try again."
+    }
+  },
+  "resendVerificationButton": "Resend verification email",
+  "cancelButton": "Cancel",
+  "verificationEmailSent": {
+    "title": "Verification email sent",
+    "message": "Please check your email to verify your account."
+  },
+  "verificationEmailError": {
+    "title": "Error resending email",
+    "message": "Could not resend the verification email. Please try again."
+  },
+  "shoppingCart": {
+    "title": "Shopping Cart",
+    "empty": "The cart is empty",
+    "remove": "Remove",
+    "quantity": "Quantity",
+    "price": "Price",
+    "total": "Total",
+    "checkout": "Checkout"
+  },
+
+  "showProduct": {
+    "productNotFound": "Product not found",
+    "productDetails": "Product Details",
+    "productImages": "Product Images",
+    "productPricing": {
+      "price": "Price:",
+      "selectOption": "Select an option",
+      "selectedPrice": "Selected price:",
+      "addToCart": "Add to cart",
+      "alertSelectOption": "Please select an option before adding to the cart."
+    }
   }
-
-
   }
 
   
