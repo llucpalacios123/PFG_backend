@@ -16,7 +16,9 @@ public class SustainableCategory {
     @JsonManagedReference
     private List<SustainableCategoryTranslation> translations;
 
-    // Getters and Setters
+    private String image; // Nuevo atributo para la imagen
+
+    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -31,5 +33,13 @@ public class SustainableCategory {
 
     public void setTranslations(List<SustainableCategoryTranslation> translations) {
         this.translations = translations;
+    }
+
+    public String getImage() { // Getter para image
+        return image;
+    }
+
+    public void setImage(String image) { // Setter para image
+        this.image = image;
     }
 }

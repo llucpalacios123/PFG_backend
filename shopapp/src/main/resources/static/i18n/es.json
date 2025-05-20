@@ -234,7 +234,122 @@
       "total": "Total",
       "checkout": "Realizar compra",
       "checkoutMessage": "Gracias por tu compra. ¡Procesaremos tu pedido pronto!"
+    },
+    
+    "searchedProductsPage": {
+    "title": "Resultados de búsqueda",
+    "loading": "Cargando productos...",
+    "noResults": "No se encontraron productos para la búsqueda."
+  },
+  "address": {
+    "title": "Mis Direcciones",
+    "loading": "Cargando...",
+    "noAddresses": "No tienes direcciones guardadas.",
+    "edit": "Modificar Dirección",
+    "form": {
+      "street": "Calle",
+      "city": "Ciudad",
+      "state": "Estado",
+      "postalCode": "Código Postal",
+      "country": "País",
+      "save": "Guardar Cambios",
+      "add": "Añadir Dirección",
+      "update": "Actualizar Dirección",
+      "delete": "Eliminar Dirección"
+    
+    },
+    "add": {
+      "success": "Dirección añadida con éxito",
+      "successMessage": "La dirección se ha añadido correctamente.",
+      "error": "Error al añadir la dirección",
+      "invalidRequest": "La solicitud no es válida.",
+      "unexpected": "Ha ocurrido un error inesperado.",
+      "serverConnection": "Error de conexión con el servidor."
+    },
+    "update": {
+      "success": "Dirección actualizada con éxito",
+      "successMessage": "La dirección se ha actualizado correctamente.",
+      "error": "Error al actualizar la dirección",
+      "invalidRequest": "La solicitud no es válida.",
+      "unexpected": "Ha ocurrido un error inesperado.",
+      "serverConnection": "Error de conexión con el servidor."
+    },
+    "delete": {
+      "success": "Dirección eliminada con éxito",
+      "successMessage": "La dirección se ha eliminado correctamente.",
+      "error": "Error al eliminar la dirección",
+      "invalidRequest": "La solicitud no es válida.",
+      "unexpected": "Ha ocurrido un error inesperado.",
+      "serverConnection": "Error de conexión con el servidor."
+    },
+    "addPaymentMethod": "Añadir Método de Pago"
+  },
+  
+  "checkout": {
+    "title": "Checkout",
+    "thankYou": "¡Gracias por tu compra!",
+    "products": {
+      "title": "Productos Seleccionados",
+      "empty": "No hay productos seleccionados."
+    },
+    "address": {
+      "title": "Dirección de Entrega"
+    },
+    "payment": {
+      "title": "Método de Pago",
+      "nameOnCard": "Nombre en la Tarjeta",
+      "nameOnCardPlaceholder": "Ejemplo: Juan Pérez",
+      "cardNumber": "Número de Tarjeta",
+      "expiryDate": "Fecha de Expiración",
+      "cvv": "CVV",
+      "total": "Total",
+      "pay": "Realizar Pago",
+      "error": {
+        "emptyFields": "Por favor, completa todos los campos.",
+        "invalidCardNumber": "El número de tarjeta debe tener 16 dígitos.",
+        "invalidCVV": "El CVV debe tener 3 dígitos."
+      }
+    },
+    "error": {
+      "title": "Error",
+      "noAddress": "Por favor, selecciona una dirección de entrega.",
+      "noProducts": "No hay productos seleccionados para realizar el pedido."
+    },
+    "success": {
+      "title": "Pedido realizado con éxito",
+      "message": "Tu pedido ha sido enviado."
     }
+  },
+  "orders": {
+    "history": {
+      "title": "Historial de pedidos",
+      "noOrders": "No tienes ningún pedido.",
+      "order": "Pedido",
+      "viewDetails": "Ver detalles",
+      "details": "Detalles del pedido",
+      "address": "Dirección de envío",
+      "status": "Estado",
+      "products": "Productos",
+      "category": "Categoría",
+      "quantity": "Cantidad",
+      "close": "Cerrar"
+    }
+  },
+  "orderHistory": {
+    "title": "Historial de pedidos",
+    "noOrders": "No hay pedidos disponibles.",
+    "order": "Pedido",
+    "status": "Estado",
+    "viewDetails": "Ver detalles",
+    "details": "Detalles del pedido",
+    "products": "Productos",
+    "category": "Categoría",
+    "quantity": "Cantidad",
+    "changeStatus": "Cambiar estado",
+    "close": "Cerrar",
+    "errorFetchingOrders": "Error al obtener los pedidos.",
+    "changeStatusLog": "Cambiando el estado del producto:"
+  }
       
       
     

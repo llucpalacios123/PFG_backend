@@ -64,7 +64,9 @@ public class SpringSecurityConfig{
                 .requestMatchers(HttpMethod.GET,"/users").hasAnyRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT,"/users/changepswd").hasAnyRole("USER", "ADMIN")
                 .requestMatchers(HttpMethod.PUT,"/users/update").hasAnyRole("USER", "ADMIN")
+                .requestMatchers(HttpMethod.GET, "/users/orders").hasAnyRole("USER", "ADMIN") // Obtener historial de pedidos
                 .requestMatchers(HttpMethod.POST,"/company").hasAnyRole("USER", "ADMIN")
+                .requestMatchers(HttpMethod.GET, "/company/orders/grouped").hasAnyRole("USER", "ADMIN")
                 .requestMatchers(HttpMethod.POST, "/products").hasAnyRole("USER", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/products/company").hasAnyRole("USER", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/products/{id}").permitAll()
@@ -76,6 +78,12 @@ public class SpringSecurityConfig{
                 .requestMatchers(HttpMethod.DELETE, "images/delete/{key}").hasAnyRole("USER", "ADMIN")
                 .requestMatchers(HttpMethod.POST, "/users/resendEmail").permitAll()
                 .requestMatchers(HttpMethod.GET, "/auth/verify").permitAll()
+                .requestMatchers(HttpMethod.GET, "/users/addresses").hasAnyRole("USER", "ADMIN") // Obtener todas las direcciones del usuario autenticado
+                .requestMatchers(HttpMethod.POST, "/users/addresses").hasAnyRole("USER", "ADMIN") // Añadir dirección
+                .requestMatchers(HttpMethod.DELETE, "/users/addresses/{addressId}").hasAnyRole("USER", "ADMIN") // Eliminar dirección
+                .requestMatchers(HttpMethod.PUT, "/users/addresses/{addressId}").hasAnyRole("USER", "ADMIN") // Modificar dirección
+                .requestMatchers(HttpMethod.POST, "/orders").hasAnyRole("USER", "ADMIN") // Crear un pedido con productos
+                .requestMatchers(HttpMethod.PUT, "/orders/{id}/status").hasAnyRole("USER", "ADMIN") // Actualizar el estado de un producto en un pedido
                 .anyRequest().authenticated()
             )
             .csrf(config -> config.disable())// Desactivar CSRF para simplificar (no recomendado en producción)

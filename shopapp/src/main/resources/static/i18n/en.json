@@ -233,7 +233,120 @@
       "addToCart": "Add to cart",
       "alertSelectOption": "Please select an option before adding to the cart."
     }
+  },
+  "searchedProductsPage": {
+    "title": "Search Results",
+    "loading": "Loading products...",
+    "noResults": "No products found for the search."
+  },
+  "address": {
+    "title": "My Addresses",
+    "loading": "Loading...",
+    "noAddresses": "You have no saved addresses.",
+    "edit": "Edit Address",
+    "form": {
+      "street": "Street",
+      "city": "City",
+      "state": "State",
+      "postalCode": "Postal Code",
+      "country": "Country",
+      "save": "Save Changes",
+      "add":"Add Address",
+      "update":"Update Address",
+      "delete":"Delete Address"
+    },
+    "add": {
+      "success": "Address added successfully",
+      "successMessage": "The address has been added successfully.",
+      "error": "Error adding the address",
+      "invalidRequest": "The request is invalid.",
+      "unexpected": "An unexpected error occurred.",
+      "serverConnection": "Server connection error."
+    },
+    "update": {
+      "success": "Address updated successfully",
+      "successMessage": "The address has been updated successfully.",
+      "error": "Error updating the address",
+      "invalidRequest": "The request is invalid.",
+      "unexpected": "An unexpected error occurred.",
+      "serverConnection": "Server connection error."
+    },
+    "delete": {
+      "success": "Address deleted successfully",
+      "successMessage": "The address has been deleted successfully.",
+      "error": "Error deleting the address",
+      "invalidRequest": "The request is invalid.",
+      "unexpected": "An unexpected error occurred.",
+      "serverConnection": "Server connection error."
+    },
+    "addPaymentMethod": "Add Payment Method"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "thankYou": "Thank you for your purchase!",
+    "products": {
+      "title": "Selected Products",
+      "empty": "No products selected."
+    },
+    "address": {
+      "title": "Delivery Address"
+    },
+    "payment": {
+      "title": "Payment Method",
+      "nameOnCard": "Name on Card",
+      "nameOnCardPlaceholder": "Example: John Doe",
+      "cardNumber": "Card Number",
+      "expiryDate": "Expiry Date",
+      "cvv": "CVV",
+      "total": "Total",
+      "pay": "Make Payment",
+      "error": {
+        "emptyFields": "Please fill in all fields.",
+        "invalidCardNumber": "Card number must be 16 digits.",
+        "invalidCVV": "CVV must be 3 digits."
+      }
+    },
+    "error": {
+      "title": "Error",
+      "noAddress": "Please select a delivery address.",
+      "noProducts": "No products selected to place the order."
+    },
+    "success": {
+      "title": "Order placed successfully",
+      "message": "Your order has been sent."
+    }
+  },
+  "orders": {
+    "history": {
+      "title": "Order History",
+      "noOrders": "You have no orders.",
+      "order": "Order",
+      "viewDetails": "View Details",
+      "details": "Order Details",
+      "address": "Shipping Address",
+      "status": "Status",
+      "products": "Products",
+      "category": "Category",
+      "quantity": "Quantity",
+      "close": "Close"
+    }
+  },
+  "orderHistory": {
+    "title": "Order History",
+    "noOrders": "No orders available.",
+    "order": "Order",
+    "status": "Status",
+    "viewDetails": "View Details",
+    "details": "Order Details",
+    "products": "Products",
+    "category": "Category",
+    "quantity": "Quantity",
+    "changeStatus": "Change Status",
+    "close": "Close",
+    "errorFetchingOrders": "Error fetching orders.",
+    "changeStatusLog": "Changing status for product:"
   }
+
   }
 
   

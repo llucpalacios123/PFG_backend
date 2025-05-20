@@ -254,6 +254,119 @@
     "total": "Total",
     "checkout": "Finalitzar compra",
     "checkoutMessage": "Gràcies per la teva compra. Processarem la teva comanda aviat!"
+  },
+  "searchedProductsPage": {
+    "title": "Resultats de la cerca",
+    "loading": "Carregant productes...",
+    "noResults": "No s'han trobat productes per a la cerca."
+  },
+  "address": {
+    "title": "Les Meves Adreces",
+    "loading": "Carregant...",
+    "noAddresses": "No tens adreces guardades.",
+
+    "edit": "Modificar Adreça",
+    "form": {
+      "street": "Carrer",
+      "city": "Ciutat",
+      "state": "Estat",
+      "postalCode": "Codi Postal",
+      "country": "País",
+      "save": "Desa Canvis",
+      "add": "Afegir Adreça",
+      "update": "Actualitzar Adreça",
+      "delete": "Eliminar Adreça"
+    },
+    "add": {
+      "success": "Adreça afegida amb èxit",
+      "successMessage": "L'adreça s'ha afegit correctament.",
+      "error": "Error en afegir l'adreça",
+      "invalidRequest": "La sol·licitud no és vàlida.",
+      "unexpected": "S'ha produït un error inesperat.",
+      "serverConnection": "Error de connexió amb el servidor."
+    },
+    "update": {
+      "success": "Adreça actualitzada amb èxit",
+      "successMessage": "L'adreça s'ha actualitzat correctament.",
+      "error": "Error en actualitzar l'adreça",
+      "invalidRequest": "La sol·licitud no és vàlida.",
+      "unexpected": "S'ha produït un error inesperat.",
+      "serverConnection": "Error de connexió amb el servidor."
+    },
+    "delete": {
+      "success": "Adreça eliminada amb èxit",
+      "successMessage": "L'adreça s'ha eliminat correctament.",
+      "error": "Error en eliminar l'adreça",
+      "invalidRequest": "La sol·licitud no és vàlida.",
+      "unexpected": "S'ha produït un error inesperat.",
+      "serverConnection": "Error de connexió amb el servidor."
+    },
+    "addPaymentMethod": "Afegir Forma de Pagament"  
+  },
+  "checkout": {
+    "title": "Finalització de Compra",
+    "thankYou": "Gràcies per la teva compra!",
+    "products": {
+      "title": "Productes Seleccionats",
+      "empty": "No hi ha productes seleccionats."
+    },
+    "address": {
+      "title": "Adreça d'Enviament"
+    },
+    "payment": {
+      "title": "Mètode de Pagament",
+      "nameOnCard": "Nom a la Targeta",
+      "nameOnCardPlaceholder": "Exemple: Joan Pérez",
+      "cardNumber": "Número de Targeta",
+      "expiryDate": "Data de Caducitat",
+      "cvv": "CVV",
+      "total": "Total",
+      "pay": "Realitzar Pagament",
+      "error": {
+        "emptyFields": "Si us plau, completa tots els camps.",
+        "invalidCardNumber": "El número de targeta ha de tenir 16 dígits.",
+        "invalidCVV": "El CVV ha de tenir 3 dígits."
+      }
+    },
+    "error": {
+      "title": "Error",
+      "noAddress": "Si us plau, selecciona una adreça d'enviament.",
+      "noProducts": "No hi ha productes seleccionats per fer la comanda."
+    },
+    "success": {
+      "title": "Comanda realitzada amb èxit",
+      "message": "La teva comanda ha estat enviada."
+    }
+  },
+  "orders": {
+    "history": {
+      "title": "Historial de comandes",
+      "noOrders": "No tens cap comanda.",
+      "order": "Comanda",
+      "viewDetails": "Veure detalls",
+      "details": "Detalls de la comanda",
+      "address": "Adreça d'enviament",
+      "status": "Estat",
+      "products": "Productes",
+      "category": "Categoria",
+      "quantity": "Quantitat",
+      "close": "Tancar"
+    }
+  },
+  "orderHistory": {
+    "title": "Historial de comandes",
+    "noOrders": "No hi ha comandes disponibles.",
+    "order": "Comanda",
+    "status": "Estat",
+    "viewDetails": "Veure detalls",
+    "details": "Detalls de la comanda",
+    "products": "Productes",
+    "category": "Categoria",
+    "quantity": "Quantitat",
+    "changeStatus": "Canviar estat",
+    "close": "Tancar",
+    "errorFetchingOrders": "Error en obtenir les comandes.",
+    "changeStatusLog": "Canviant l'estat del producte:"
   }
   
 

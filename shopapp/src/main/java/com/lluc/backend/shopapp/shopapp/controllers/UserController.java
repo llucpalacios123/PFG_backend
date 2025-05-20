@@ -20,10 +20,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lluc.backend.shopapp.shopapp.models.dto.OrderDTO;
 import com.lluc.backend.shopapp.shopapp.models.dto.UpdateUserDTO;
 import com.lluc.backend.shopapp.shopapp.models.dto.UserDTO;
 import com.lluc.backend.shopapp.shopapp.models.dto.mapper.DTOMapperUpdateUser;
 import com.lluc.backend.shopapp.shopapp.models.entities.User;
+import com.lluc.backend.shopapp.shopapp.models.entities.UserAddress;
+import com.lluc.backend.shopapp.shopapp.models.request.UserAddressRequest;
 import com.lluc.backend.shopapp.shopapp.services.interfaces.UserService;
 
 import jakarta.validation.Valid;
@@ -136,6 +139,79 @@ public class UserController {
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("error.user.not.found"); // Clave para i18n
+    }
+
+
+    // Añadir una dirección de entrega
+@PostMapping("/addresses")
+public ResponseEntity<?> addAddress(@RequestBody UserAddressRequest addressRequest) {
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    try {
+        UserAddress address = new UserAddress();
+        address.setStreet(addressRequest.getStreet());
+        address.setCity(addressRequest.getCity());
+        address.setState(addressRequest.getState());
+        address.setPostalCode(addressRequest.getPostalCode());
+        address.setCountry(addressRequest.getCountry());
+
+        UserAddress savedAddress = userService.addAddress(username, address);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedAddress);
+    } catch (RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+}
+
+// Eliminar una dirección de entrega
+@DeleteMapping("/addresses/{addressId}")
+public ResponseEntity<?> deleteAddress(@PathVariable Long addressId) {
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    try {
+        userService.deleteAddress(username, addressId);
+        return ResponseEntity.noContent().build();
+    } catch (RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+}
+
+// Modificar una dirección de entrega
+@PutMapping("/addresses/{addressId}")
+public ResponseEntity<?> updateAddress(@PathVariable Long addressId, @RequestBody UserAddressRequest addressRequest) {
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    try {
+        UserAddress updatedAddress = new UserAddress();
+        updatedAddress.setStreet(addressRequest.getStreet());
+        updatedAddress.setCity(addressRequest.getCity());
+        updatedAddress.setState(addressRequest.getState());
+        updatedAddress.setPostalCode(addressRequest.getPostalCode());
+        updatedAddress.setCountry(addressRequest.getCountry());
+
+        UserAddress savedAddress = userService.updateAddress(username, addressId, updatedAddress);
+        return ResponseEntity.ok(savedAddress);
+    } catch (RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+}
+
+    @GetMapping("/addresses")
+    public ResponseEntity<?> getAddresses() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        try {
+            List<UserAddress> addresses = userService.getAddresses(username);
+            return ResponseEntity.ok(addresses);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/orders")
+    public ResponseEntity<?> getOrderHistory() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        try {
+            List<OrderDTO> orderHistory = userService.getOrderHistory(username);
+            return ResponseEntity.ok(orderHistory);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
 }

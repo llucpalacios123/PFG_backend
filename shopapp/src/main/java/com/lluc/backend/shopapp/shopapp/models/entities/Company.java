@@ -66,4 +66,7 @@ public class Company {
     @Getter
     @Setter
     private Integer version = 0; 
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Getter @Setter private List<OrderProduct> orderProducts; // Productos en pedidos asociados a la compañía
 }

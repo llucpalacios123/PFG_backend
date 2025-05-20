@@ -1,18 +1,19 @@
 package com.lluc.backend.shopapp.shopapp.services.Implementations;
 
 import com.lluc.backend.shopapp.shopapp.auth.JwtTokenProvider;
+import com.lluc.backend.shopapp.shopapp.models.dto.OrderDTO;
 import com.lluc.backend.shopapp.shopapp.models.dto.UserDTO;
 import com.lluc.backend.shopapp.shopapp.models.dto.mapper.DTOMapperUser;
 import com.lluc.backend.shopapp.shopapp.models.entities.Role;
 import com.lluc.backend.shopapp.shopapp.models.entities.User;
+import com.lluc.backend.shopapp.shopapp.models.entities.UserAddress;
 import com.lluc.backend.shopapp.shopapp.repositories.RoleRepository;
+import com.lluc.backend.shopapp.shopapp.repositories.UserAddressRepository;
 import com.lluc.backend.shopapp.shopapp.repositories.UsersRepository;
 import com.lluc.backend.shopapp.shopapp.services.interfaces.UserService;
 
-import jakarta.validation.constraints.Email;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -42,6 +43,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private UserAddressRepository userAddressRepository;    
 
     public UserServiceImpl(UsersRepository usersRepository, RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
@@ -209,8 +213,90 @@ public class UserServiceImpl implements UserService {
 
     // Enviar el correo de verificación
     String subject = "Reenvío de verificación de cuenta";
-    String body = "Hola " + user.getUsername() + ",\n\nHaz clic en el siguiente enlace para verificar tu cuenta:\n" + verificationLink;
+    String body = "Hola " + user.getUsername() + ",<br><br>" +
+              "Haz clic en el siguiente enlace para verificar tu cuenta:<br>" +
+              "<a href=\"" + verificationLink + "\">Verificar cuenta</a>";
 
     emailService.sendRegistrationEmail(user.getEmail(), subject, body);
     }
+
+    @Override
+@Transactional
+public UserAddress addAddress(String username, UserAddress address) {
+    User user = usersRepository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+    address.setUser(user);
+    return userAddressRepository.save(address);
+}
+
+@Override
+@Transactional
+public void deleteAddress(String username, Long addressId) {
+    User user = usersRepository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+    UserAddress address = userAddressRepository.findById(addressId)
+            .orElseThrow(() -> new RuntimeException("Address not found with ID: " + addressId));
+    if (!address.getUser().getId().equals(user.getId())) {
+        throw new RuntimeException("Address does not belong to the authenticated user");
+    }
+    userAddressRepository.delete(address);
+}
+
+@Override
+@Transactional
+public UserAddress updateAddress(String username, Long addressId, UserAddress updatedAddress) {
+    User user = usersRepository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+    UserAddress existingAddress = userAddressRepository.findById(addressId)
+            .orElseThrow(() -> new RuntimeException("Address not found with ID: " + addressId));
+    if (!existingAddress.getUser().getId().equals(user.getId())) {
+        throw new RuntimeException("Address does not belong to the authenticated user");
+    }
+    existingAddress.setStreet(updatedAddress.getStreet());
+    existingAddress.setCity(updatedAddress.getCity());
+    existingAddress.setState(updatedAddress.getState());
+    existingAddress.setPostalCode(updatedAddress.getPostalCode());
+    existingAddress.setCountry(updatedAddress.getCountry());
+    return userAddressRepository.save(existingAddress);
+}
+
+@Override
+@Transactional(readOnly = true)
+public List<UserAddress> getAddresses(String username) {
+    User user = usersRepository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+    return user.getAddresses();
+}
+
+@Override
+@Transactional(readOnly = true)
+public List<OrderDTO> getOrderHistory(String username) {
+    User user = usersRepository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+
+    return user.getOrders().stream().map(order -> {
+        OrderDTO orderDTO = new OrderDTO();
+        orderDTO.setOrderId(order.getOrderId());
+        orderDTO.setOrderDate(order.getOrderDate());
+        orderDTO.setStatus(order.getStatus());
+        orderDTO.setStreet(order.getStreet());
+        orderDTO.setCity(order.getCity());
+        orderDTO.setState(order.getState());
+        orderDTO.setPostalCode(order.getPostalCode());
+        orderDTO.setCountry(order.getCountry());
+
+        List<OrderDTO.OrderProductDTO> productDTOs = order.getProducts().stream().map(product -> {
+            OrderDTO.OrderProductDTO productDTO = new OrderDTO.OrderProductDTO();
+            productDTO.setProductName(product.getProduct().getTranslations().get(0).getName());
+            productDTO.setCategory(product.getCategory());
+            productDTO.setQuantity(product.getQuantity());
+            productDTO.setStatus(product.getStatus());
+            productDTO.setImageUrl(product.getProduct().getPhotos().get(0));
+            return productDTO;
+        }).collect(Collectors.toList());
+
+        orderDTO.setProducts(productDTOs);
+        return orderDTO;
+    }).collect(Collectors.toList());
+}
 }

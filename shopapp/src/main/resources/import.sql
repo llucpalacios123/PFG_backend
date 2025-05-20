@@ -54,11 +54,14 @@ INSERT INTO category_translation (language_code, name, category_id) VALUES ('ca'
 -- ==========================================
 -- CATEGORÍAS SOSTENIBLES
 -- ==========================================
-INSERT INTO sustainable_category (id) VALUES (1); -- Categoría 1: Vegano
-INSERT INTO sustainable_category (id) VALUES (2); -- Categoría 2: Handmade
-INSERT INTO sustainable_category (id) VALUES (3); -- Categoría 3: Reciclado
-INSERT INTO sustainable_category (id) VALUES (4); -- Categoría 4: Orgánico
-INSERT INTO sustainable_category (id) VALUES (5); -- Categoría 5: Zero Waste
+-- ==========================================
+-- CATEGORÍAS SOSTENIBLES
+-- ==========================================
+INSERT INTO sustainable_category (id, image) VALUES (1, 'vegan.png'); -- Categoría 1: Vegano
+INSERT INTO sustainable_category (id, image) VALUES (2, 'handmade.png'); -- Categoría 2: Handmade
+INSERT INTO sustainable_category (id, image) VALUES (3, 'recycled.png'); -- Categoría 3: Reciclado
+INSERT INTO sustainable_category (id, image) VALUES (4, 'organic.png'); -- Categoría 4: Orgánico
+INSERT INTO sustainable_category (id, image) VALUES (5, 'reused.png'); -- Categoría 5: Zero Waste
 
 -- Traducciones para la Categoría Sostenible 1: Vegano
 INSERT INTO sustainable_category_translation (language_code, name, sustainable_category_id) VALUES ('es', 'Vegano', 1);
@@ -129,3 +132,52 @@ INSERT INTO `pricing` (`id`, `category_name`, `product_id`) VALUES (5, 'singlePr
 INSERT INTO `pricing_value` (`category_value`, `price`, `cost`, `stock`, `pricing_id`) VALUES ('unique', 39.99, 25.00, 50, 5);
 INSERT INTO `product_sustainable_categories` (`product_id`, `sustainable_category_id`) VALUES (5, 3);
 INSERT INTO `product_photos` (`product_id`, `photos`) VALUES (5, 'recycled_backpack_1.jpg'), (5, 'recycled_backpack_2.jpg'), (5, 'recycled_backpack_3.jpg');
+
+
+-- Camisetas
+
+-- Camiseta 1: Zero Waste
+INSERT INTO `product` (`id`, `tax`, `category_id`, `company_id`, `fecha_alta`) VALUES (6, 21.00, 1, 1, NOW());
+INSERT INTO `product_translation` (`language_code`, `name`, `description`, `product_id`) VALUES ('es', 'Camiseta Zero Waste', 'Camiseta fabricada con materiales sostenibles y reciclados.', 6), ('en', 'Zero Waste T-Shirt', 'T-shirt made with sustainable and recycled materials.', 6), ('ca', 'Samarreta Zero Waste', 'Samarreta feta amb materials sostenibles i reciclats.', 6);
+
+INSERT INTO `pricing` (`id`, `category_name`, `product_id`) VALUES (6, 'Talla', 6);
+INSERT INTO `pricing_value` (`category_value`, `price`, `cost`, `stock`, `pricing_id`) VALUES ('S', 19.99, 15.00, 50, 6), ('M', 21.99, 16.00, 50, 6), ('L', 23.99, 17.00, 50, 6), ('XL', 25.99, 18.00, 50, 6);
+
+INSERT INTO `product_sustainable_categories` (`product_id`, `sustainable_category_id`) VALUES (6, 5), (6, 1);
+
+INSERT INTO `product_photos` (`product_id`, `photos`) VALUES (6, 'camiseta1.webp'), (6, 'camiseta2.webp'), (6, 'camiseta3.webp');
+
+-- Camiseta 2: Vegana
+INSERT INTO `product` (`id`, `tax`, `category_id`, `company_id`, `fecha_alta`) VALUES (7, 21.00, 1, 1, NOW());
+INSERT INTO `product_translation` (`language_code`, `name`, `description`, `product_id`) VALUES ('es', 'Camiseta Vegana', 'Camiseta fabricada sin materiales de origen animal.', 7), ('en', 'Vegan T-Shirt', 'T-shirt made without animal-derived materials.', 7), ('ca', 'Samarreta Vegana', 'Samarreta feta sense materials d'origen animal.', 7);
+
+INSERT INTO `pricing` (`id`, `category_name`, `product_id`) VALUES (7, 'Talla', 7);
+INSERT INTO `pricing_value` (`category_value`, `price`, `cost`, `stock`, `pricing_id`) VALUES ('S', 22.99, 18.00, 50, 7), ('M', 24.99, 20.00, 50, 7), ('L', 26.99, 22.00, 50, 7), ('XL', 28.99, 24.00, 50, 7);
+
+INSERT INTO `product_sustainable_categories` (`product_id`, `sustainable_category_id`) VALUES (7, 1), (7, 4);
+
+INSERT INTO `product_photos` (`product_id`, `photos`) VALUES (7, 'camiseta1.webp'), (7, 'camiseta2.webp'), (7, 'camiseta3.webp');
+
+-- Camiseta 3: Handmade
+INSERT INTO `product` (`id`, `tax`, `category_id`, `company_id`, `fecha_alta`) VALUES (8, 21.00, 1, 1, NOW());
+INSERT INTO `product_translation` (`language_code`, `name`, `description`, `product_id`) VALUES ('es', 'Camiseta Hecha a Mano', 'Camiseta fabricada a mano con materiales sostenibles.', 8), ('en', 'Handmade T-Shirt', 'Handmade t-shirt with sustainable materials.', 8), ('ca', 'Samarreta Fet a Mà', 'Samarreta feta a mà amb materials sostenibles.', 8);
+
+INSERT INTO `pricing` (`id`, `category_name`, `product_id`) VALUES (8, 'Talla', 8);
+INSERT INTO `pricing_value` (`category_value`, `price`, `cost`, `stock`, `pricing_id`) VALUES ('S', 24.99, 19.00, 50, 8), ('M', 26.99, 20.50, 50, 8), ('L', 28.99, 22.00, 50, 8), ('XL', 30.99, 23.50, 50, 8);
+
+INSERT INTO `product_sustainable_categories` (`product_id`, `sustainable_category_id`) VALUES (8, 2), (8, 3);
+
+INSERT INTO `product_photos` (`product_id`, `photos`) VALUES (8, 'camiseta1.webp'), (8, 'camiseta2.webp'), (8, 'camiseta3.webp');
+
+-- Camiseta 4: Orgánica
+INSERT INTO `product` (`id`, `tax`, `category_id`, `company_id`, `fecha_alta`) VALUES (9, 21.00, 1, 1, NOW());
+INSERT INTO `product_translation` (`language_code`, `name`, `description`, `product_id`) VALUES ('es', 'Camiseta Orgánica', 'Camiseta fabricada con algodón 100% orgánico.', 9), ('en', 'Organic T-Shirt', 'T-shirt made with 100% organic cotton.', 9), ('ca', 'Samarreta Orgànica', 'Samarreta feta amb cotó 100% orgànic.', 9);
+
+INSERT INTO `pricing` (`id`, `category_name`, `product_id`) VALUES (9, 'Talla', 9);
+INSERT INTO `pricing_value` (`category_value`, `price`, `cost`, `stock`, `pricing_id`) VALUES ('S', 25.99, 19.50, 50, 9), ('M', 27.99, 21.50, 50, 9), ('L', 29.99, 23.50, 50, 9), ('XL', 31.99, 25.50, 50, 9);
+
+INSERT INTO `product_sustainable_categories` (`product_id`, `sustainable_category_id`) VALUES (9, 4), (9, 5);
+
+INSERT INTO `product_photos` (`product_id`, `photos`) VALUES (9, 'camiseta1.webp'), (9, 'camiseta2.webp'), (9, 'camiseta3.webp');
+
+-- Fin de camisetas
