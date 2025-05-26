@@ -20,7 +20,7 @@ public interface UserService {
     
     void delete(Long id);
 
-    Optional<UserDTO> findByUsername(String username);
+    Optional<UserDTO> findByUsernameDTO(String username);
 
     void changePassword(String username, String oldPassword, String newPassword);
 
@@ -36,4 +36,5 @@ public interface UserService {
     List<UserAddress> getAddresses(String username);
 
     List<OrderDTO> getOrderHistory(String username);
+    Optional<User> findByUsername(String username);
 }

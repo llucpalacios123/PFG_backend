@@ -36,20 +36,27 @@ public class Company {
     @Getter
     @Setter
     private String description;
-
-    @Getter
-    @Setter
-    private String address;
-
-    @Getter
-    @Setter
-    private String phoneNumber;
     
     @Getter
     @Setter
     @Email
     @NotNull
     private String email;
+
+    // Nuevos campos para datos fiscales
+    @Getter
+    @Setter
+    @NotNull
+    private String fiscalName; // Nombre fiscal de la compañía
+
+    @Getter
+    @Setter
+    @NotNull
+    private String fiscalId; // Número de identificación fiscal (NIF)
+
+    @Getter
+    @Setter
+    private String fiscalAddress; // Dirección fiscal
 
     @Getter
     @Setter

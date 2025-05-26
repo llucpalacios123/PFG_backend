@@ -24,16 +24,34 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
         SELECT DISTINCT p FROM Product p 
         JOIN p.translations t 
         LEFT JOIN p.sustainableCategories sc 
+        LEFT JOIN p.category c
         WHERE (LOWER(t.name) LIKE LOWER(CONCAT('%', :query, '%')) 
         OR LOWER(t.description) LIKE LOWER(CONCAT('%', :query, '%')))
         AND (
-            :sustainableCategories IS NULL 
-            OR sc.id IN :sustainableCategories
+            (:sustainableCategoriesEmpty = true OR sc.id IN :sustainableCategories)
+        )
+        AND (
+            (:categoriesEmpty = true OR c.id IN :categories)
         )
     """)
-    Page<Product> findProductFiltereds( 
+    Page<Product> findProductFiltereds(
         @Param("query") String query,
         @Param("sustainableCategories") List<Long> sustainableCategories,
+        @Param("sustainableCategoriesEmpty") boolean sustainableCategoriesEmpty,
+        @Param("categories") List<Long> categories,
+        @Param("categoriesEmpty") boolean categoriesEmpty,
         Pageable pageable
+    );
+    
+    @Query("""
+    SELECT DISTINCT p FROM Product p
+    JOIN p.category c
+    LEFT JOIN p.sustainableCategories sc
+    WHERE c.id = :categoryId
+    AND (:sustainableCategoryIds IS NULL OR sc.id IN :sustainableCategoryIds)
+    """)
+    List<Product> findByCategoryAndSustainableCategories(
+        @Param("categoryId") Long categoryId,
+        @Param("sustainableCategoryIds") List<Long> sustainableCategoryIds
     );
 }

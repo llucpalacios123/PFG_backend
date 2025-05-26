@@ -22,6 +22,8 @@ public class OrderDTO {
     @Getter
     @Setter
     public static class OrderProductDTO {
+        private long productId;
+        private long orderProductId;
         private String productName;
         private String category;
         private int quantity;

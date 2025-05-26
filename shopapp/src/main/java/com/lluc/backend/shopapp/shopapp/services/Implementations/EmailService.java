@@ -19,10 +19,18 @@ public class EmailService {
     private JavaMailSender mailSender;
 
     @Async
-    public void sendRegistrationEmail(String toEmail, String subject, String body) {
+    public void sendRegistrationEmail(String toEmail, String username, String token) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            String subject = "Verificación de cuenta";
+            String verificationLink = "http://localhost:5173/auth/verify?token=" + token;
+
+            String body = "<h1>Hola " + username + ",</h1>"
+                    + "<p>Gracias por registrarte en nuestra plataforma. Por favor, verifica tu cuenta haciendo clic en el siguiente enlace:</p>"
+                    + "<a href=\"" + verificationLink + "\">Verificar cuenta</a>"
+                    + "<p>Si no solicitaste esta cuenta, puedes ignorar este mensaje.</p>";
 
             helper.setFrom("no-reply@shopapp.com");
             helper.setTo(toEmail);

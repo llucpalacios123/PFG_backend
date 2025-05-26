@@ -3,7 +3,7 @@ package com.lluc.backend.shopapp.shopapp.services.Implementations;
 import com.lluc.backend.shopapp.shopapp.auth.JwtTokenProvider;
 import com.lluc.backend.shopapp.shopapp.models.dto.OrderDTO;
 import com.lluc.backend.shopapp.shopapp.models.dto.UserDTO;
-import com.lluc.backend.shopapp.shopapp.models.dto.mapper.DTOMapperUser;
+import com.lluc.backend.shopapp.shopapp.models.dto.mapper.UserMapper;
 import com.lluc.backend.shopapp.shopapp.models.entities.Role;
 import com.lluc.backend.shopapp.shopapp.models.entities.User;
 import com.lluc.backend.shopapp.shopapp.models.entities.UserAddress;
@@ -11,7 +11,6 @@ import com.lluc.backend.shopapp.shopapp.repositories.RoleRepository;
 import com.lluc.backend.shopapp.shopapp.repositories.UserAddressRepository;
 import com.lluc.backend.shopapp.shopapp.repositories.UsersRepository;
 import com.lluc.backend.shopapp.shopapp.services.interfaces.UserService;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -45,7 +44,7 @@ public class UserServiceImpl implements UserService {
     private EmailService emailService;
 
     @Autowired
-    private UserAddressRepository userAddressRepository;    
+    private UserAddressRepository userAddressRepository;
 
     public UserServiceImpl(UsersRepository usersRepository, RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
@@ -56,9 +55,9 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> findAll() {
         List<User> users = usersRepository.findAll();
 
-        // Convert all users to UserDTO using streams
+        // Convert all users to UserDTO using MapStruct
         return users.stream()
-                .map(DTOMapperUser::toDTO)
+                .map(UserMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -88,16 +87,11 @@ public class UserServiceImpl implements UserService {
         List<GrantedAuthority> authorities = roles.stream()
                 .map(r -> new SimpleGrantedAuthority(r.getName()))
                 .collect(Collectors.toList());
-        String token = jwtTokenProvider.generateToken(userSaved.getId(), userSaved.getUsername(), authorities, user.getEmpresa() != null, true, 24*14);
+        String token = jwtTokenProvider.generateToken(userSaved.getId(), userSaved.getUsername(), authorities, user.getEmpresa() != null, true, 24 * 14);
 
-         // Enviar el correo de confirmación
-         String verificationLink = "http://localhost:8080/auth/verify?token=" + token;
-         String subject = "Verificación de cuenta";
-         String body = "Hola " + user.getUsername() + ",\n\nHaz clic en el siguiente enlace para verificar tu cuenta:\n" + verificationLink;
- 
-         emailService.sendRegistrationEmail(user.getEmail(), subject, body);
+        emailService.sendRegistrationEmail(user.getEmail(), user.getUsername(), token);
 
-        return DTOMapperUser.toDTO(userSaved);
+        return UserMapper.INSTANCE.toDTO(userSaved); // Usar MapStruct
     }
 
     private UserDTO updateUser(User user) {
@@ -128,17 +122,16 @@ public class UserServiceImpl implements UserService {
         String newToken = null;
 
         if (usernameChanged) {
-            
-            newToken = null;
             List<GrantedAuthority> authorities = updatedUser.getRoles()
-            .stream()
-            .map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
+                    .stream()
+                    .map(r -> new SimpleGrantedAuthority(r.getName()))
+                    .collect(Collectors.toList());
 
             newToken = jwtTokenProvider.generateToken(updatedUser.getId(), updatedUser.getUsername(), authorities, user.getEmpresa() != null, false, 2);
         }
 
-        // Convert the updated user to DTO
-        UserDTO userDTO = DTOMapperUser.toDTO(updatedUser);
+        // Convert the updated user to DTO using MapStruct
+        UserDTO userDTO = UserMapper.INSTANCE.toDTO(updatedUser);
 
         if (newToken != null) {
             userDTO.setToken(newToken);
@@ -154,7 +147,7 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("User not found with id: " + id);
         }
 
-        return Optional.of(DTOMapperUser.toDTO(user.get()));
+        return Optional.of(UserMapper.INSTANCE.toDTO(user.get())); // Usar MapStruct
     }
 
     @Transactional
@@ -168,28 +161,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<UserDTO> findByUsername(String username) {
+    public Optional<UserDTO> findByUsernameDTO(String username) {
         User user = usersRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
 
-        return Optional.of(DTOMapperUser.toDTO(user));
+        return Optional.of(UserMapper.INSTANCE.toDTO(user)); // Usar MapStruct
     }
 
     @Override
     public void changePassword(String username, String oldPassword, String newPassword) {
         // Find the user by username
         Optional<User> userOptional = usersRepository.findByUsername(username);
-    
+
         if (userOptional.isEmpty()) {
             throw new RuntimeException("Usuario no encontrado");
         }
-    
+
         User user = userOptional.get();
-        
+
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
             throw new RuntimeException("La contraseña antigua es incorrecta");
         }
-    
+
         // Update the password
         user.setPassword(passwordEncoder.encode(newPassword));
         usersRepository.save(user);
@@ -203,100 +196,99 @@ public class UserServiceImpl implements UserService {
     @Override
     public void resendVerificationEmail(User user) {
         // Generar un nuevo token de verificación
-    List<GrantedAuthority> authorities = user.getRoles().stream()
-    .map(role -> new SimpleGrantedAuthority(role.getName()))
-    .collect(Collectors.toList());
-    String token = jwtTokenProvider.generateToken(user.getId(), user.getUsername(), authorities, user.getEmpresa() != null, true,24*14);
+        List<GrantedAuthority> authorities = user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
+        String token = jwtTokenProvider.generateToken(user.getId(), user.getUsername(), authorities, user.getEmpresa() != null, true, 24 * 14);
 
-    // Crear el enlace de verificación
-    String verificationLink = "http://localhost:8080/auth/verify?token=" + token;
-
-    // Enviar el correo de verificación
-    String subject = "Reenvío de verificación de cuenta";
-    String body = "Hola " + user.getUsername() + ",<br><br>" +
-              "Haz clic en el siguiente enlace para verificar tu cuenta:<br>" +
-              "<a href=\"" + verificationLink + "\">Verificar cuenta</a>";
-
-    emailService.sendRegistrationEmail(user.getEmail(), subject, body);
+        // Crear el enlace de verificación
+        emailService.sendRegistrationEmail(user.getEmail(), user.getUsername(), token);
     }
 
     @Override
-@Transactional
-public UserAddress addAddress(String username, UserAddress address) {
-    User user = usersRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
-    address.setUser(user);
-    return userAddressRepository.save(address);
-}
-
-@Override
-@Transactional
-public void deleteAddress(String username, Long addressId) {
-    User user = usersRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
-    UserAddress address = userAddressRepository.findById(addressId)
-            .orElseThrow(() -> new RuntimeException("Address not found with ID: " + addressId));
-    if (!address.getUser().getId().equals(user.getId())) {
-        throw new RuntimeException("Address does not belong to the authenticated user");
+    @Transactional
+    public UserAddress addAddress(String username, UserAddress address) {
+        User user = usersRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+        address.setUser(user);
+        return userAddressRepository.save(address);
     }
-    userAddressRepository.delete(address);
-}
 
-@Override
-@Transactional
-public UserAddress updateAddress(String username, Long addressId, UserAddress updatedAddress) {
-    User user = usersRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
-    UserAddress existingAddress = userAddressRepository.findById(addressId)
-            .orElseThrow(() -> new RuntimeException("Address not found with ID: " + addressId));
-    if (!existingAddress.getUser().getId().equals(user.getId())) {
-        throw new RuntimeException("Address does not belong to the authenticated user");
+    @Override
+    @Transactional
+    public void deleteAddress(String username, Long addressId) {
+        User user = usersRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+        UserAddress address = userAddressRepository.findById(addressId)
+                .orElseThrow(() -> new RuntimeException("Address not found with ID: " + addressId));
+        if (!address.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("Address does not belong to the authenticated user");
+        }
+        userAddressRepository.delete(address);
     }
-    existingAddress.setStreet(updatedAddress.getStreet());
-    existingAddress.setCity(updatedAddress.getCity());
-    existingAddress.setState(updatedAddress.getState());
-    existingAddress.setPostalCode(updatedAddress.getPostalCode());
-    existingAddress.setCountry(updatedAddress.getCountry());
-    return userAddressRepository.save(existingAddress);
-}
 
-@Override
-@Transactional(readOnly = true)
-public List<UserAddress> getAddresses(String username) {
-    User user = usersRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
-    return user.getAddresses();
-}
+    @Override
+    @Transactional
+    public UserAddress updateAddress(String username, Long addressId, UserAddress updatedAddress) {
+        User user = usersRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+        UserAddress existingAddress = userAddressRepository.findById(addressId)
+                .orElseThrow(() -> new RuntimeException("Address not found with ID: " + addressId));
+        if (!existingAddress.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("Address does not belong to the authenticated user");
+        }
+        existingAddress.setStreet(updatedAddress.getStreet());
+        existingAddress.setCity(updatedAddress.getCity());
+        existingAddress.setState(updatedAddress.getState());
+        existingAddress.setPostalCode(updatedAddress.getPostalCode());
+        existingAddress.setCountry(updatedAddress.getCountry());
+        return userAddressRepository.save(existingAddress);
+    }
 
-@Override
-@Transactional(readOnly = true)
-public List<OrderDTO> getOrderHistory(String username) {
-    User user = usersRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserAddress> getAddresses(String username) {
+        User user = usersRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+        return user.getAddresses();
+    }
 
-    return user.getOrders().stream().map(order -> {
-        OrderDTO orderDTO = new OrderDTO();
-        orderDTO.setOrderId(order.getOrderId());
-        orderDTO.setOrderDate(order.getOrderDate());
-        orderDTO.setStatus(order.getStatus());
-        orderDTO.setStreet(order.getStreet());
-        orderDTO.setCity(order.getCity());
-        orderDTO.setState(order.getState());
-        orderDTO.setPostalCode(order.getPostalCode());
-        orderDTO.setCountry(order.getCountry());
+    @Override
+    @Transactional(readOnly = true)
+    public List<OrderDTO> getOrderHistory(String username) {
+        User user = usersRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
 
-        List<OrderDTO.OrderProductDTO> productDTOs = order.getProducts().stream().map(product -> {
-            OrderDTO.OrderProductDTO productDTO = new OrderDTO.OrderProductDTO();
-            productDTO.setProductName(product.getProduct().getTranslations().get(0).getName());
-            productDTO.setCategory(product.getCategory());
-            productDTO.setQuantity(product.getQuantity());
-            productDTO.setStatus(product.getStatus());
-            productDTO.setImageUrl(product.getProduct().getPhotos().get(0));
-            return productDTO;
+        return user.getOrders().stream().map(order -> {
+            OrderDTO orderDTO = new OrderDTO();
+            orderDTO.setOrderId(order.getOrderId());
+            orderDTO.setOrderDate(order.getOrderDate());
+            orderDTO.setStatus(order.getStatus());
+            orderDTO.setStreet(order.getStreet());
+            orderDTO.setCity(order.getCity());
+            orderDTO.setState(order.getState());
+            orderDTO.setPostalCode(order.getPostalCode());
+            orderDTO.setCountry(order.getCountry());
+
+            List<OrderDTO.OrderProductDTO> productDTOs = order.getProducts().stream().map(product -> {
+                OrderDTO.OrderProductDTO productDTO = new OrderDTO.OrderProductDTO();
+                productDTO.setProductId(product.getProduct().getId());
+                productDTO.setOrderProductId(product.getId());
+                productDTO.setProductName(product.getProduct().getTranslations().get(0).getName());
+                productDTO.setCategory(product.getCategory());
+                productDTO.setQuantity(product.getQuantity());
+                productDTO.setStatus(product.getStatus());
+                productDTO.setImageUrl(product.getProduct().getPhotos().get(0));
+                return productDTO;
+            }).collect(Collectors.toList());
+
+            orderDTO.setProducts(productDTOs);
+            return orderDTO;
         }).collect(Collectors.toList());
+    }
 
-        orderDTO.setProducts(productDTOs);
-        return orderDTO;
-    }).collect(Collectors.toList());
-}
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return usersRepository.findByUsername(username);
+    }
 }

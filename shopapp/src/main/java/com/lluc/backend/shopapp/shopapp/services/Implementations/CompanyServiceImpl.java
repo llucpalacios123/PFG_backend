@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.lluc.backend.shopapp.shopapp.models.dto.CompanyDTO;
 import com.lluc.backend.shopapp.shopapp.models.dto.CompanyOrderDTO;
 import com.lluc.backend.shopapp.shopapp.models.dto.UserDTO;
-import com.lluc.backend.shopapp.shopapp.models.dto.mapper.DTOMapperCompany;
+import com.lluc.backend.shopapp.shopapp.models.dto.mapper.CompanyMapper;
 import com.lluc.backend.shopapp.shopapp.models.entities.Company;
 import com.lluc.backend.shopapp.shopapp.models.entities.OrderProduct;
 import com.lluc.backend.shopapp.shopapp.models.entities.User;
@@ -47,23 +47,26 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     @Transactional
     public CompanyDTO save(UserDTO userDTO, CompanyRequest companyRequest) {
-
-        
+        // Buscar al usuario por su ID
         User user = userRepository.findById(userDTO.getId())
-        .orElseThrow(() -> new RuntimeException("User not found"));
-
-        Company company = new Company();
-        company.setName(companyRequest.getName());
-        company.setDescription(companyRequest.getDescription());
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    
+        // Mapear los datos de CompanyRequest a la entidad Company usando MapStruct
+        Company company = CompanyMapper.INSTANCE.toEntity(companyRequest);
+    
+        // Establecer el administrador y el email de la compañía
         company.setAdministrator(user);
         company.setEmail(user.getEmail());
+    
+        // Guardar la compañía en la base de datos
         Company companySaved = companyRepository.save(company);
-        
+    
+        // Asociar la compañía al usuario
         user.setEmpresa(companySaved);
         userRepository.save(user);
-
-        return DTOMapperCompany.toDTO(companySaved);
-
+    
+        // Convertir la entidad guardada a DTO y devolverla
+        return CompanyMapper.INSTANCE.toDTO(companySaved);
     }
 
     @Override
@@ -92,6 +95,8 @@ public class CompanyServiceImpl implements CompanyService {
 
             List<CompanyOrderDTO.OrderProductDTO> productDTOs = entry.getValue().stream().map(orderProduct -> {
                 CompanyOrderDTO.OrderProductDTO productDTO = new CompanyOrderDTO.OrderProductDTO();
+                ;
+                productDTO.setProductId(orderProduct.getId());
                 productDTO.setProductName(orderProduct.getProduct().getTranslations().get(0).getName());
                 productDTO.setCategory(orderProduct.getCategory());
                 productDTO.setQuantity(orderProduct.getQuantity());

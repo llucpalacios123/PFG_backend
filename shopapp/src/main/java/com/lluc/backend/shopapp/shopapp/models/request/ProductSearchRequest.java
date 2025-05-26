@@ -10,6 +10,7 @@ import java.util.List;
 public class ProductSearchRequest {
     private String query;
     private List<Long> sustainableCategories;
+    private List<Long> categories;
     private int page = 0; 
     private int size = 10; 
     private String sort = "fechaAlta,asc"; 

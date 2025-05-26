@@ -54,7 +54,7 @@ public class CompanyController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         // Busca al usuario en la base de datos por su nombre de usuario
-        Optional<UserDTO> user = userService.findByUsername(username);
+        Optional<UserDTO> user = userService.findByUsernameDTO(username);
         return ResponseEntity.status(HttpStatus.CREATED).body(companyService.save(user.get(), company));
     }
 

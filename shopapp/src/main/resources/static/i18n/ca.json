@@ -66,6 +66,7 @@
   },
 
   
+  
     "createCompany": {
       "title": "Crear Empresa",
       "nameLabel": "Nom de l'empresa",
@@ -74,8 +75,22 @@
       "descriptionLabel": "Descripció",
       "descriptionPlaceholder": "Introdueix una descripció de l'empresa",
       "descriptionError": "La descripció és obligatòria",
+      "fiscalNameLabel": "Nom fiscal",
+      "fiscalNamePlaceholder": "Introdueix el nom fiscal",
+      "fiscalNameError": "El nom fiscal és obligatori",
+      "fiscalIdLabel": "NIF",
+      "fiscalIdPlaceholder": "Introdueix el NIF",
+      "fiscalIdError": "El NIF és obligatori",
+      "fiscalAddressLabel": "Adreça fiscal",
+      "fiscalAddressPlaceholder": "Introdueix l'adreça fiscal",
+      "fiscalAddressError": "L'adreça fiscal és obligatòria",
+      "emailLabel": "Correu electrònic",
+      "emailPlaceholder": "Introdueix el correu electrònic",
+      "emailError": "El correu electrònic és obligatori",
+      "emailInvalidError": "El correu electrònic no és vàlid",
       "submitButton": "Crear"
     },
+  
     "companyProductsPage": {
       "title": "Productes de l'empresa",
       "createProductButton": "Crear producte",
@@ -89,12 +104,34 @@
         "actions": "Accions"
       },
       "actionsButton": "Accions",
-      "actions": {
-        "edit": "Editar",
-        "editStock": "Editar estoc",
-        "deactivate": "Donar de baixa"
-      },
-      "noDate": "Sense data"
+      "activateModal": {
+      "titleActivate": "Activar producte",
+      "titleDeactivate": "Desactivar producte",
+      "bodyActivate": "Estàs segur que vols activar el producte \"{{productName}}\"?",
+      "bodyDeactivate": "Estàs segur que vols desactivar el producte \"{{productName}}\"?",
+      "cancelButton": "Cancel·lar",
+      "confirmActivateButton": "Activar",
+      "confirmDeactivateButton": "Desactivar"
+    },
+    "actions": {
+      "editStock": "Editar estoc",
+      "activate": "Activar",
+      "deactivate": "Desactivar"
+    },
+      "noDate": "Sense data",
+      "editStockModal": {
+      "title": "Editar estoc",
+      "defaultCategory": "Categoria per defecte",
+      "cancelButton": "Cancel·lar",
+      "saveButton": "Desar"
+    },
+    "deactivateModal": {
+      "title": "Desactivar producte",
+      "body": "Estàs segur que vols desactivar el producte \"{{productName}}\"?",
+      "cancelButton": "Cancel·lar",
+      "confirmButton": "Desactivar"
+    }
+  
     },
     "addProductPage": {
       "title": "Afegir Producte",
@@ -136,7 +173,8 @@
       "errorMissingName": "Si us plau, proporciona almenys un nom de producte.",
       "errorMissingDescription": "Si us plau, proporciona almenys una descripció del producte.",
       "errorMissingCategory": "Si us plau, selecciona una categoria.",
-      "errorMissingPricing": "Si us plau, afegeix almenys un valor de preu."
+      "errorMissingPricing": "Si us plau, afegeix almenys un valor de preu.",
+      "errorMissingPhotos": "Falta afegir almenys una imatge."
     },
     "productSinglePrice": {
       "title": "Preu Únic",
@@ -203,13 +241,22 @@
     },
     "loading": "Carregant...",
     "registerForm": {
-      "firstName": "Nom",
-      "lastName": "Cognom",
-      "username": "Nom d'usuari",
-      "email": "Correu electrònic",
-      "password": "Contrasenya",
-      "submit": "Crear"
-    },
+    "firstName": "Nom",
+    "lastName": "Cognom",
+    "username": "Nom d'usuari",
+    "email": "Correu electrònic",
+    "password": "Contrasenya",
+    "confirmPassword": "Confirma la contrasenya",
+    "submit": "Registrar-se",
+    "errors": {
+      "firstNameRequired": "El nom és obligatori.",
+      "lastNameRequired": "El cognom és obligatori.",
+      "usernameRequired": "El nom d'usuari és obligatori.",
+      "emailRequired": "El correu electrònic és obligatori.",
+      "passwordRequired": "La contrasenya és obligatòria.",
+      "passwordMismatch": "Les contrasenyes no coincideixen."
+    }
+  },
 
     "error": {
     "usernotverified": {
@@ -334,8 +381,13 @@
       "noProducts": "No hi ha productes seleccionats per fer la comanda."
     },
     "success": {
-      "title": "Comanda realitzada amb èxit",
-      "message": "La teva comanda ha estat enviada."
+      "title": "Compra completada",
+      "message": "La teva compra s'ha completat amb èxit. Rebràs un correu electrònic de confirmació aviat.",
+      "confirmButton": "Tornar a l'inici"
+    },
+    "verifyingCard": {
+      "title": "Verificant Targeta",
+      "message": "Estem verificant la teva targeta de crèdit. Si us plau, espera uns moments."
     }
   },
   "orders": {
@@ -350,7 +402,10 @@
       "products": "Productes",
       "category": "Categoria",
       "quantity": "Quantitat",
-      "close": "Tancar"
+      "close": "Tancar",
+      "changeStatusToReceived": "rebut",
+      "addReview": "Afegir ressenya",
+      "addReport": "Afegir denúncia"
     }
   },
   "orderHistory": {
@@ -367,7 +422,48 @@
     "close": "Tancar",
     "errorFetchingOrders": "Error en obtenir les comandes.",
     "changeStatusLog": "Canviant l'estat del producte:"
+  },
+  "addReview": {
+    "title": "Afegir ressenya",
+    "rating": "Valoració",
+    "comment": "Comentari",
+    "commentPlaceholder": "Escriu el teu comentari aquí...",
+    "cancel": "Cancel·lar",
+    "submit": "Enviar",
+    "successTitle": "Ressenya enviada",
+    "successMessage": "La teva ressenya s'ha enviat correctament.",
+    "errorTitle": "Error",
+    "errorMessage": "No s'ha pogut enviar la ressenya. Torna-ho a intentar."
+  },
+  "addReport": {
+    "title": "Afegir denúncia",
+    "comment": "Comentari",
+    "commentPlaceholder": "Escriu el teu comentari aquí...",
+    "cancel": "Cancel·lar",
+    "submit": "Enviar",
+    "successTitle": "Denúncia enviada",
+    "successMessage": "La teva denúncia s'ha enviat correctament.",
+    "errorTitle": "Error",
+    "errorMessage": "No s'ha pogut enviar la denúncia. Torna-ho a intentar."
+  },
+  "showProductPage": {
+    "reviewsTab": "Ressenyes",
+    "reportsTab": "Denúncies",
+    "productNotFound": "Producte no trobat"
+  },
+  "productFeedback": {
+    "reviewsTitle": "Ressenyes",
+    "reportsTitle": "Denúncies",
+    "noData": "No hi ha dades disponibles.",
+    "user": "Usuari"
+  },
+
+  "termsOfUse": {
+  "title": "Condicions d’Ús",
+  "lastUpdate": "Data d’actualització: 26/05/2025",
+  "info": "En registrar-te a la nostra plataforma i fer-ne ús, acceptes aquestes Condicions d’Ús. Si no hi estàs d’acord, no has d’utilitzar aquesta plataforma. La nostra plataforma permet als usuaris explorar, comprar i gestionar productes sostenibles oferts per diferents empreses registrades. Per utilitzar certes funcionalitats cal registrar-se i proporcionar informació veraç i actualitzada. Ets responsable de mantenir la confidencialitat de les teves credencials. Està prohibit utilitzar la plataforma per a activitats il·lícites, incloent-hi però no limitant-se a: frau, suplantació d’identitat, publicació de contingut ofensiu o manipulació del sistema. Els productes són gestionats directament per les empreses creades pels usuaris. La nostra plataforma no es responsabilitza del contingut, veracitat o qualitat dels productes, tot i que supervisem que compleixin criteris de sostenibilitat. Tots els continguts de la plataforma, excepte els aportats pels usuaris, són propietat de l’empresa i estan protegits per la normativa vigent. Ens reservem el dret de suspendre o cancel·lar comptes d’usuaris que incompleixin aquestes condicions o facin un ús inadequat de la plataforma. Aquestes condicions poden actualitzar-se. Es notificarà als usuaris registrats quan hi hagi canvis importants. Per a qualsevol dubte sobre aquestes condicions, pots contactar amb nosaltres a través del correu contact@wallfri.com."
   }
+
   
 
 }

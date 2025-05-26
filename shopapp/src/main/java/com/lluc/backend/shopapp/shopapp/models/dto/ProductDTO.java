@@ -19,5 +19,7 @@ public class ProductDTO {
     @Getter @Setter private Long companyId; // ID de la empresa asociada
     @Getter @Setter private List<PricingDTO> pricing; // Lista de precios personalizados
     @Getter @Setter private LocalDateTime fechaAlta; 
-
+    @Getter @Setter private List<ReviewDTO> reviews; // Lista de reviews asociadas al producto
+    @Getter @Setter private List<ReportDTO> reports; // Lista de reports asociadas al producto
+    @Getter @Setter private boolean active; // Indica si el producto está activo o no
 }

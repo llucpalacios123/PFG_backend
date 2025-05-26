@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,12 +24,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lluc.backend.shopapp.shopapp.models.dto.OrderDTO;
 import com.lluc.backend.shopapp.shopapp.models.dto.UpdateUserDTO;
 import com.lluc.backend.shopapp.shopapp.models.dto.UserDTO;
-import com.lluc.backend.shopapp.shopapp.models.dto.mapper.DTOMapperUpdateUser;
+import com.lluc.backend.shopapp.shopapp.models.dto.mapper.UpdateUserMapper;
 import com.lluc.backend.shopapp.shopapp.models.entities.User;
 import com.lluc.backend.shopapp.shopapp.models.entities.UserAddress;
 import com.lluc.backend.shopapp.shopapp.models.request.UserAddressRequest;
 import com.lluc.backend.shopapp.shopapp.services.interfaces.UserService;
 
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 
 @RestController
@@ -53,21 +55,35 @@ public class UserController {
         return ResponseEntity.badRequest().body(errors); 
     }
 
-    
+        
     @PostMapping
     public ResponseEntity<?> createUser(@Valid @RequestBody User user, BindingResult result) {
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             return validationErrors(result);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
+
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
+        } catch (DataIntegrityViolationException ex) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Violación de restricción de la base de datos");
+            error.put("details", ex.getMostSpecificCause().getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        } catch (ConstraintViolationException ex) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Violación de restricción de la base de datos");
+            error.put("details", ex.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
     }
 
     @PutMapping("/update")
     public ResponseEntity<?> updateUser(@Valid @RequestBody UpdateUserDTO user, BindingResult result) {
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             return validationErrors(result);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(DTOMapperUpdateUser.toEntity(user)));
+        // Usar MapStruct para convertir de UpdateUserDTO a User
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(UpdateUserMapper.INSTANCE.toEntity(user)));
     }
 
     @GetMapping("/me")
@@ -76,7 +92,7 @@ public class UserController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         // Busca al usuario en la base de datos por su nombre de usuario
-        Optional<UserDTO> user = userService.findByUsername(username);
+        Optional<UserDTO> user = userService.findByUsernameDTO(username);
 
         if (user.isPresent()) {
             return ResponseEntity.ok(user.get());

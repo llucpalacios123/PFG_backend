@@ -70,10 +70,20 @@ public class Product {
     @Column(nullable = false, updatable = false)
     private LocalDateTime fechaAlta;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("product-review") // Marca esta relación como la parte "propietaria"
+    private List<Review> reviews;
+    
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("product-report") // Marca esta relación como la parte "propietaria"
+    private List<Report> reports;
+
     @PrePersist
     protected void onCreate() {
         if (this.fechaAlta == null) {
             this.fechaAlta = LocalDateTime.now(); // Establece la fecha actual al crear el producto
         }
     }
+
+    @Getter @Setter private Boolean active = true; // Indica si el producto está activo o no
 }

@@ -12,6 +12,7 @@ import com.lluc.backend.shopapp.shopapp.repositories.ProductRepository;
 import com.lluc.backend.shopapp.shopapp.repositories.UserAddressRepository;
 import com.lluc.backend.shopapp.shopapp.repositories.UsersRepository;
 import com.lluc.backend.shopapp.shopapp.services.interfaces.OrderService;
+import com.lluc.backend.shopapp.shopapp.services.interfaces.ProductService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,9 +43,12 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private ProductService productService;
+
     @Override
-    @Transactional
-    public Order createOrder(String username, OrderRequest orderRequest) {
+        @Transactional
+        public Order createOrder(String username, OrderRequest orderRequest) {
         // Buscar al usuario por su username
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
@@ -67,34 +71,21 @@ public class OrderServiceImpl implements OrderService {
 
         // Asociar los productos al pedido
         List<OrderProduct> orderProducts = orderRequest.getProducts().stream().map(productRequest -> {
-            OrderProduct orderProduct = new OrderProduct();
-            Product product = productRepository.findById(productRequest.getProductId())
-                    .orElseThrow(() -> new RuntimeException("Product not found with ID: " + productRequest.getProductId()));
+                OrderProduct orderProduct = new OrderProduct();
+                Product product = productRepository.findById(productRequest.getProductId())
+                        .orElseThrow(() -> new RuntimeException("Product not found with ID: " + productRequest.getProductId()));
 
-            // Buscar la categoría específica (PricingValue) del producto
-            PricingValue pricingValue = product.getPricing().stream()
-                    .flatMap(pricing -> pricing.getValues().stream())
-                    .filter(value -> value.getCategoryValue().equals(productRequest.getCategory()))
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Category not found for product ID: " + productRequest.getProductId()));
+                // Actualizar el stock utilizando el nuevo método
+                productService.updateStock(product, productRequest.getCategory(), productRequest.getQuantity());
 
-            // Verificar el stock
-            if (pricingValue.getStock() < productRequest.getQuantity()) {
-                throw new RuntimeException("Insufficient stock for product ID: " + productRequest.getProductId() +
-                        " in category: " + productRequest.getCategory());
-            }
-
-            // Restar el stock
-            pricingValue.setStock(pricingValue.getStock() - productRequest.getQuantity());
-
-            // Configurar los datos del producto en el pedido
-            orderProduct.setProduct(product);
-            orderProduct.setOrder(order);
-            orderProduct.setQuantity(productRequest.getQuantity());
-            orderProduct.setStatus("PENDING");
-            orderProduct.setCategory(productRequest.getCategory()); // Asignar la categoría
-            orderProduct.setCompany(product.getCompany()); // Asignar la empresa
-            return orderProduct;
+                // Configurar los datos del producto en el pedido
+                orderProduct.setProduct(product);
+                orderProduct.setOrder(order);
+                orderProduct.setQuantity(productRequest.getQuantity());
+                orderProduct.setStatus("PENDING");
+                orderProduct.setCategory(productRequest.getCategory()); // Asignar la categoría
+                orderProduct.setCompany(product.getCompany()); // Asignar la empresa
+                return orderProduct;
         }).collect(Collectors.toList());
 
         order.setProducts(orderProducts);
@@ -103,7 +94,7 @@ public class OrderServiceImpl implements OrderService {
 
         // Guardar el pedido en la base de datos
         return orderRepository.save(order);
-    }
+        }
 
     
 }

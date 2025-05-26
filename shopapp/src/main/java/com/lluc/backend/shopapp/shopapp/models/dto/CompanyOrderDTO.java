@@ -15,6 +15,7 @@ public class CompanyOrderDTO {
     @Getter
     @Setter
     public static class OrderProductDTO {
+        private long productId; // ID del producto
         private String productName;
         private String category;
         private int quantity;
