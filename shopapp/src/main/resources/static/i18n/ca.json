@@ -32,6 +32,20 @@
     "login": "Iniciar sessió",
     "createCompany": "Crear empresa"
   },
+  "login": {
+    "title": "Pàgina d'inici de sessió",
+    "usernamePlaceholder": "Nom d'usuari",
+    "passwordPlaceholder": "Contrasenya",
+    "rememberMe": "Recorda'm",
+    "noAccount": "No tens compte?",
+    "createAccount": "Crea'n un",
+    "loginButton": "Inicia sessió",
+    "closeButton": "Tanca",
+    "validationError": {
+      "title": "Error de validació",
+      "message": "Nom d'usuari i contrasenya requerits"
+    }
+  },
   "errors": {
     "noUserId": "No s'ha trobat l'identificador d'usuari.",
     "noLoginKey": "No s'ha trobat la clau de sessió.",
@@ -58,12 +72,15 @@
       "passwordMismatch": "La nova contrasenya i la confirmació no coincideixen.",
       "changeFailed": "No s'ha pogut canviar la contrasenya.",
       "generic": "S'ha produït un error en canviar la contrasenya.",
-      "incorrectOldPassword": "La contrasenya antiga és incorrecta."
+      "incorrectOldPassword": "La contrasenya antiga és incorrecta.",
+      "title": "Error en canviar la contrasenya",
+      "invalidRequest": "La sol·licitud per canviar la contrasenya no és vàlida."
+    }
     },
     "success": {
       "passwordChanged": "Contrasenya canviada correctament!"
-    }
-  },
+    },
+      
 
   
   
@@ -88,7 +105,13 @@
       "emailPlaceholder": "Introdueix el correu electrònic",
       "emailError": "El correu electrònic és obligatori",
       "emailInvalidError": "El correu electrònic no és vàlid",
-      "submitButton": "Crear"
+      "submitButton": "Crear",
+      "acceptLawsLabel": "Accepto les lleis i condicions",
+    "viewLaws": "Veure lleis",
+    "acceptLawsError": "Has d'acceptar les lleis per continuar.",
+    "lawsModalTitle": "Lleis i condicions",
+    "lawsModalContent": "En acceptar aquestes condicions, confirmes que:\n\n1. La informació proporcionada és precisa, completa i actualitzada.\n2. La teva empresa compleix amb totes les normatives legals aplicables, incloent-hi les lleis fiscals, laborals i de protecció de dades.\n3. Ets responsable de qualsevol incompliment de les normatives vigents i acceptes que l'empresa no es fa responsable de cap dany o pèrdua derivada d'aquest incompliment.\n4. Has revisat i acceptat les polítiques de privacitat i termes d'ús de la plataforma.\n\nSi tens algun dubte sobre aquestes condicions, et recomanem que consultis amb un assessor legal abans de continuar.",
+    "closeButton": "Tancar"
     },
   
     "companyProductsPage": {
@@ -248,17 +271,29 @@
     "password": "Contrasenya",
     "confirmPassword": "Confirma la contrasenya",
     "submit": "Registrar-se",
+    "acceptTerms": "Accepto les condicions d’ús",
+  "viewTerms": "Veure condicions",
+  "termsModal": {
+    "title": "Condicions d’Ús",
+    "content": "En registrar-te a la nostra plataforma i fer-ne ús, acceptes aquestes Condicions d’Ús. Si no hi estàs d’acord, no has d’utilitzar aquesta plataforma. La nostra plataforma permet als usuaris explorar, comprar i gestionar productes sostenibles oferts per diferents empreses registrades. Per utilitzar certes funcionalitats cal registrar-se i proporcionar informació veraç i actualitzada. Ets responsable de mantenir la confidencialitat de les teves credencials. Està prohibit utilitzar la plataforma per a activitats il·lícites, incloent-hi però no limitant-se a: frau, suplantació d’identitat, publicació de contingut ofensiu o manipulació del sistema. Els productes són gestionats directament per les empreses creades pels usuaris. La nostra plataforma no es responsabilitza del contingut, veracitat o qualitat dels productes, tot i que supervisem que compleixin criteris de sostenibilitat. Tots els continguts de la plataforma, excepte els aportats pels usuaris, són propietat de l’empresa i estan protegits per la normativa vigent. Ens reservem el dret de suspendre o cancel·lar comptes d’usuaris que incompleixin aquestes condicions o facin un ús inadequat de la plataforma. Aquestes condicions poden actualitzar-se. Es notificarà als usuaris registrats quan hi hagi canvis importants. Per a qualsevol dubte sobre aquestes condicions, pots contactar amb nosaltres a través del correu contact@wallfri.com.",
+    "closeButton": "Tancar"
+  },
     "errors": {
       "firstNameRequired": "El nom és obligatori.",
       "lastNameRequired": "El cognom és obligatori.",
       "usernameRequired": "El nom d'usuari és obligatori.",
       "emailRequired": "El correu electrònic és obligatori.",
       "passwordRequired": "La contrasenya és obligatòria.",
-      "passwordMismatch": "Les contrasenyes no coincideixen."
+      "passwordMismatch": "Les contrasenyes no coincideixen.",
+      "acceptTermsRequired": "Has d'acceptar les condicions d'ús per continuar."
     }
   },
 
     "error": {
+      "authenticationfailed": {
+      "title": "Error d'autenticació",
+      "message": "El nom d'usuari o la contrasenya no són correctes."
+    },
     "usernotverified": {
       "title": "Usuari no verificat",
       "message": "Si us plau, verifica el teu compte abans d'accedir."
@@ -292,6 +327,11 @@
       "selectedPrice": "Preu seleccionat:",
       "addToCart": "Afegeix al carret",
       "alertSelectOption": "Si us plau, selecciona una opció abans d'afegir al carret."
+    },
+    "sustainableCategories": {
+      "title": "Categories sostenibles",
+      "noCategories": "No hi ha categories sostenibles disponibles.",
+      "imageAlt": "Imatge de la categoria sostenible"
     }
   },
   "shoppingCart": {

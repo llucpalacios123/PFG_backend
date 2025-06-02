@@ -37,23 +37,20 @@ public class AuthController {
 
                 if (userOptional.isPresent()) {
                     User user = userOptional.get();
-                    user.setVerified(true); // Marcamos el usuario como verificado
+                    user.setVerified(true); // Marcar el usuario como verificado
                     usersRepository.save(user);
 
-                    // Enviar correo de confirmación
-                    String subject = "Cuenta verificada correctamente";
-                    String body = "Hola " + user.getFirstName() + ",\n\nTu cuenta ha sido verificada correctamente. ¡Gracias por registrarte en Wallfri!";
-                    emailService.sendRegistrationEmail(user.getEmail(), subject, body);
+                    emailService.sendVerificationEmail(user.getEmail(), user.getFirstName());
 
-                    return ResponseEntity.ok("Cuenta verificada correctamente."); // 200 OK
+                    return ResponseEntity.ok("Compte verificat correctament."); // 200 OK
                 } else {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado."); // 404 Not Found
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuari no trobat."); // 404 Not Found
                 }
             } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token no válido para verificación."); // 400 Bad Request
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token no vàlid per a verificació."); // 400 Bad Request
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido o expirado."); // 401 Unauthorized
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token invàlid o caducat."); // 401 Unauthorized
         }
     }
 }
